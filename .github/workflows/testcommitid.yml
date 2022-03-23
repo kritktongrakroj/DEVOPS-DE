@@ -5,21 +5,24 @@ name: Test-CommitID-Dev
 on:
   workflow_dispatch:
     inputs:
-      
-
-      # This resource group for the Databricks workspace and KeyVault
-      RESOURCE_GROUP:
-        description: 'Resource Group Name'
+      # This to test notebook path
+      GIT_NOTEBOOK_PATH:
+        description: 'Notebooks Relative Path in Git'
         required: true
-        default: 'Devopsdeploy-cosmos-dev-poc'
+        default: '/testcommit'
+        
 
-
-      # This is a KeyVault for holding the Service Principal to make Databricks API calls and to hold Databricks KeyVault backed Secrets
-      KEY_VAULT_NAME:
-        description: 'KeyVault name'
+      # This is commit id value
+      COMMIT_ID:
+        description: 'Commit ID'
         required: true
-        default: 'devops-key-dev'
+        default: '1e184eba51c7b408bdc7924498446e52e91b5aa7'
 
+      # This is commit id value
+      BASELINE_ID:
+        description: 'Baseline ID'
+        required: true
+        default: 'BSL..'
 
 jobs:
   #############################################################
@@ -35,38 +38,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    
+    # upload file: test file
+    - name: 'test upload past-version file' 
+      uses: actions/upload-artifact@v2
+      with:
+        path: '${{ github.workspace }}/${{ github.event.inputs.GIT_NOTEBOOK_PATH }}'
     
                    
-
-
-#############################################################
-# Deploy to Dev
-#############################################################
-  Dev:
-    needs: Build
-    runs-on: ubuntu-latest
-    env:
-      resourceGroupName: '${{ github.event.inputs.RESOURCE_GROUP }}'
-      keyVaultName: '${{ github.event.inputs.KEY_VAULT_NAME }}'
-
-    steps:
-    
-    - name: Checkout code
-      uses: actions/checkout@v2
-        
-    # Login to Azure
-    - name: Login via Az module
-      uses: ./Marketplace-Module/azure-login
-      with:
-        creds: ${{ secrets.DEV_AZURE_CREDENTIALS }}
-        # set this if you will be using PowerShell
-        # enable-AzPSSession: true 
-    
-    # Download KeyVault Secrets
-    - name: Download KeyVault Secrets
-      uses: ./Marketplace-Module/keyvault-module
-      with:
-        keyvault: ${{ env.keyVaultName }}
-        secrets: 'keyvault-client-id,keyvault-client-secret,keyvault-tenant-id,keyvault-subscription-id'
-      id: myGetSecretAction
