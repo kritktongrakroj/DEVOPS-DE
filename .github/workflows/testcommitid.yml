@@ -9,7 +9,7 @@ on:
       GIT_NOTEBOOK_PATH:
         description: 'Notebooks Relative Path in Git'
         required: true
-        default: '/testcommit'
+        default: 'testcommit/'
         
 
       # This is commit id value
