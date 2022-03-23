@@ -39,7 +39,7 @@ jobs:
       uses: actions/checkout@v2
 
     # upload file: test file
-    - name: 'test upload past-version file' 
+    - name: 'test upload file' 
       uses: actions/upload-artifact@v2
       with:
         path: '${{ github.workspace }}/${{ github.event.inputs.GIT_NOTEBOOK_PATH }}'
