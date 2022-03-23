@@ -37,6 +37,8 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
+      with:
+        ref: '${{ github.event.inputs.COMMIT_ID }}'
 
     # upload file: test file
     - name: 'test upload file' 
