@@ -8,13 +8,12 @@ import base64
 ############################
 
 
-path = str(sys.argv[1])
-print(path)
-repo = git.Repo()
-print(repo)
-current_commit_version = repo.commit(config.CURRENT_VERSION)
-new_commit_version = repo.commit(config.NEW_VERSION)
-print(current_commit_version)
+repo_path = str(sys.argv[1])
+repo_url = str(sys.argv[2])
+
+print(repo_path)
+print(repo_url)
+repo = git.Repo.clone_from(repo_url, repo_path, no_checkout=True)
 
 # the below gives us all commits
 repo.commits()
