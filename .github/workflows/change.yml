@@ -11,7 +11,7 @@ on:
       GIT_NOTEBOOK_PATH:
         description: 'Notebooks Relative Path in Git'
         required: true
-        default: 'notebooks/BSL001'
+        default: '/testcommit'
 
 jobs:
   #############################################################
