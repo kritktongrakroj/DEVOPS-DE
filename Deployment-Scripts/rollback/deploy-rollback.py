@@ -17,16 +17,14 @@ repo = git.Repo.clone_from(repo_url, repo_path)
 print(repo)
 
 commits_list = list(repo.iter_commits())
-lastest = len(commits_list)
-previous = len(commits_list) - 1
 
 print(commits_list)
-print ("First commit: ", commits_list[lastest])
-print ("First commit: ", commits_list[previous])
+print ("last commit: ", commits_list[-1])
+print ("prevois commit: ", commits_list[-2])
 
 changed_files = []
 
-for x in commits_list[0].diff(commits_list[-1]):
+for x in commits_list[-1].diff(commits_list[-2]):
     if x.a_blob.path not in changed_files:
         changed_files.append(x.a_blob.path)
         
