@@ -19,6 +19,8 @@ print(repo)
 commits_list = list(repo.iter_commits())
 print ("First commit: ", commits_list[0])
 
+difrepo = repo.diff(commits_list[0],commits_list[1])
+print(difrepo)
 
 # the below gives us all commits
 #repo.commits()
