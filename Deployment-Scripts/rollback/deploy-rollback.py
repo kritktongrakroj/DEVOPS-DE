@@ -24,7 +24,8 @@ print ("prevois commit: ", commits_list[-2])
 
 changed_files = []
 
-for x in commits_list[-1].diff(commits_list[-2]):
+
+for x in commits_list[-2].diff(commits_list[-1]):
     if x.a_blob.path not in changed_files:
         changed_files.append(x.a_blob.path)
         
