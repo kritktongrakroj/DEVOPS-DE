@@ -1,6 +1,7 @@
 import git
 import sys
 import os
+import utils
 from os.path import isfile, join
 from os import listdir
 import base64
@@ -34,14 +35,10 @@ for x in commits_list[0].diff(commits_list[1]):
         
 print (changed_files)
 
-# the below gives us all commits
-#repo.commits()
-
-# take the first and last commit
-
-#a_commit = repo.commits()[0]
-#b_commit = repo.commits()[1]
-
-# now get the diff
-#difrepo = repo.diff(a_commit,b_commit)
-#print(difrepo)
+for info in changed_files:
+        change_type, file_path = info.split("\t",1)
+        #if file_path.startswith(('dp-bt', 'dp-rlt')):
+        #env_config_path = f'{config.REPO_NOTEBOOKS_DIRECTORY}/fw/cmmn/config/environment_config' # Deploy every time
+        if file_path.startswith(repo_path):
+            print(change_type, file_path)
+            
