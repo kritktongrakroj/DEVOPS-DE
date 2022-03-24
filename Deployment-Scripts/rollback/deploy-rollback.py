@@ -10,6 +10,7 @@ import base64
 
 repo_path = str(sys.argv[1])
 repo_url = str(sys.argv[2])
+commitid = str(sys.argv[3])
 
 print(repo_path)
 print(repo_url)
@@ -20,12 +21,12 @@ commits_list = list(repo.iter_commits())
 
 print(commits_list)
 print ("last commit: ", commits_list[0])
-print ("prevois commit: ", commits_list[1])
+print ("selected commit: ", commitid)
 
 changed_files = []
 
 
-for x in commits_list[0].diff(commits_list[1]):
+for x in commits_list[0].diff(commitid):
     if x.a_blob.path not in changed_files:
         changed_files.append(x.a_blob.path)
         
