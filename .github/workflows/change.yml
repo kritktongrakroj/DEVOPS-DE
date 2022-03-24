@@ -48,7 +48,7 @@ jobs:
     needs: Build
     runs-on: ubuntu-latest
     env:
-       repopath: '${{ github.workspace }}/${{ github.event.inputs.GIT_NOTEBOOK_PATH }}'
+       repopath: '${{ github.event.inputs.GIT_NOTEBOOK_PATH }}'
        repourl: '${{ github.event.inputs.GIT_URL }}'
 
     steps:
