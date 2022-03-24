@@ -11,7 +11,12 @@ on:
       GIT_NOTEBOOK_PATH:
         description: 'Notebooks Relative Path in Git'
         required: true
-        default: '/testcommit'
+        default: 'testcommit'
+      
+      GIT_URL:
+        description: 'Repo URL'
+        required: true
+        default: 'https://github.com/kritktongrakroj/SCB.git'
 
 jobs:
   #############################################################
@@ -44,6 +49,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
        repopath: '${{ github.workspace }}/${{ github.event.inputs.GIT_NOTEBOOK_PATH }}'
+       repourl: '${{ github.event.inputs.GIT_URL }}'
 
     steps:
 
@@ -69,4 +75,4 @@ jobs:
     - name: Deploy script
       run: |
        chmod +x $GITHUB_WORKSPACE/Deployment-Scripts/rollback/deploy-rollback.py
-       python3 $GITHUB_WORKSPACE/Deployment-Scripts/rollback/deploy-rollback.py ${{ env.repopath }}
+       python3 $GITHUB_WORKSPACE/Deployment-Scripts/rollback/deploy-rollback.py ${{ env.repopath }} ${{ env.repopath }}
