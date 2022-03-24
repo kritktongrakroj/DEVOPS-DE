@@ -52,6 +52,11 @@ jobs:
        repourl: '${{ github.event.inputs.GIT_URL }}'
 
     steps:
+    
+     # Checkout code
+    
+    - name: Checkout code
+      uses: actions/checkout@v2
 
     
     # Download Artifact: Deployment Scripts
