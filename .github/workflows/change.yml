@@ -1,0 +1,72 @@
+
+
+name: change
+
+
+# Manual trigger with parameters
+on:
+  workflow_dispatch:
+    inputs:
+      # This is the path of your notebooks in Git.  Currently, this is not recursively deploying notebooks
+      GIT_NOTEBOOK_PATH:
+        description: 'Notebooks Relative Path in Git'
+        required: true
+        default: 'notebooks/BSL001'
+
+jobs:
+  #############################################################
+  # Builds the code
+  # Currently this is not building and JAR files, but you would do that here
+  # This is packaging up the files from Git to the Artifacts files
+  #############################################################
+  Build:
+    runs-on: ubuntu-latest
+      
+    # Checkout code
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      
+
+    # Publish Artifact: Deployment-Scripts
+    - name: 'Publish Artifact: Deployment-Scripts' 
+      uses: actions/upload-artifact@v2
+      with:
+        name: 'deployment-scripts'
+        path: '${{ github.workspace }}/Deployment-Scripts/rollback'
+    
+   
+#############################################################
+# Deploy to Dev
+#############################################################
+  Dev:
+    needs: Build
+    runs-on: ubuntu-latest
+    env:
+       repopath: '${{ github.workspace }}/${{ github.event.inputs.GIT_NOTEBOOK_PATH }}'
+
+    steps:
+
+    
+    # Download Artifact: Deployment Scripts
+    - name: 'Download Artifact: Deployment Scripts' 
+      uses: actions/download-artifact@v2
+      with:
+        name: 'deployment-scripts'
+        path: ${{ github.workspace }}/Deployment-Scripts/rollback
+
+    - name: setup python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8 #install the python needed
+      
+    - name: Install dependencies
+      run: |
+        cd "$GITHUB_WORKSPACE/Deployment-Scripts/rollback"
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+      
+    - name: Deploy script
+      run: |
+       chmod +x $GITHUB_WORKSPACE/Deployment-Scripts/rollback/deploy-rollback.py
+       python3 $GITHUB_WORKSPACE/Deployment-Scripts/rollback/deploy-rollback.py ${{ env.repopath }}
