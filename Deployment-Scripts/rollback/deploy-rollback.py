@@ -13,8 +13,12 @@ repo_url = str(sys.argv[2])
 
 print(repo_path)
 print(repo_url)
-repo = git.Repo.clone_from(repo_url, repo_path, no_checkout=True)
+repo = git.Repo.clone_from(repo_url, repo_path)
 print(repo)
+
+commits_list = list(repo.iter_commits())
+print ("First commit: ", commits_list[0])
+
 
 # the below gives us all commits
 #repo.commits()
