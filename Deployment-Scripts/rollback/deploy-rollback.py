@@ -12,6 +12,9 @@ path = str(sys.argv[1])
 print(path)
 repo = git.Repo()
 print(repo)
+current_commit_version = repo.commit(config.CURRENT_VERSION)
+new_commit_version = repo.commit(config.NEW_VERSION)
+print(current_commit_version)
 
 # the below gives us all commits
 repo.commits()
