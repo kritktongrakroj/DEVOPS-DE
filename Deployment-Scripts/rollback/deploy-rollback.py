@@ -14,15 +14,16 @@ repo_url = str(sys.argv[2])
 print(repo_path)
 print(repo_url)
 repo = git.Repo.clone_from(repo_url, repo_path, no_checkout=True)
+print(repo)
 
 # the below gives us all commits
-repo.commits()
+#repo.commits()
 
 # take the first and last commit
 
-a_commit = repo.commits()[0]
-b_commit = repo.commits()[1]
+#a_commit = repo.commits()[0]
+#b_commit = repo.commits()[1]
 
 # now get the diff
-difrepo = repo.diff(a_commit,b_commit)
-print(difrepo)
+#difrepo = repo.diff(a_commit,b_commit)
+#print(difrepo)
