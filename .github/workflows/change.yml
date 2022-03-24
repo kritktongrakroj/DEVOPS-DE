@@ -17,6 +17,12 @@ on:
         description: 'Repo URL'
         required: true
         default: 'https://github.com/kritktongrakroj/SCB.git'
+        
+      COMMIT_ID:
+        description: 'Commit Rollback ID'
+        required: true
+        default: 'fd9ab0a94dab5d01f6502939ac8506242f97c19e'
+
 
 jobs:
   #############################################################
@@ -50,6 +56,7 @@ jobs:
     env:
        repopath: '${{ github.event.inputs.GIT_NOTEBOOK_PATH }}'
        repourl: '${{ github.event.inputs.GIT_URL }}'
+       commitid: '${{ github.event.inputs.COMMIT_ID }}'
 
     steps:
     
@@ -75,4 +82,4 @@ jobs:
     - name: Deploy script
       run: |
        chmod +x $GITHUB_WORKSPACE/Deployment-Scripts/rollback/deploy-rollback.py
-       python3 $GITHUB_WORKSPACE/Deployment-Scripts/rollback/deploy-rollback.py ${{ env.repopath }} ${{ env.repourl }}
+       python3 $GITHUB_WORKSPACE/Deployment-Scripts/rollback/deploy-rollback.py ${{ env.repopath }} ${{ env.repourl }} ${{ env.commitid }}
