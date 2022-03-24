@@ -17,6 +17,7 @@ repo = git.Repo.clone_from(repo_url, repo_path)
 print(repo)
 
 commits_list = list(repo.iter_commits())
+print(commits_list)
 print ("First commit: ", commits_list[0])
 
 changed_files = []
