@@ -21,7 +21,7 @@ on:
       COMMIT_ID:
         description: 'Commit Rollback ID'
         required: true
-        default: 'fd9ab0a94dab5d01f6502939ac8506242f97c19e'
+        default: '1ba561836cbec5d5c2650d35c2d8822d0fb3478c'
 
 
 jobs:
