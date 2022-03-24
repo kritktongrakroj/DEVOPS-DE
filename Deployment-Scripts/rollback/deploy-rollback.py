@@ -18,7 +18,8 @@ print(repo)
 
 commits_list = list(repo.iter_commits())
 print(commits_list)
-print ("First commit: ", commits_list[0])
+print ("First commit: ", commits_list[len(commits_list)])
+print ("First commit: ", commits_list[len(commits_list) - 1])
 
 changed_files = []
 
