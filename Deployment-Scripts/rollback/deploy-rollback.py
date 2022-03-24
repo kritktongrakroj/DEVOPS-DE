@@ -39,6 +39,7 @@ for info in changed_files:
         #env_config_path = f'{config.REPO_NOTEBOOKS_DIRECTORY}/fw/cmmn/config/environment_config' # Deploy every time
         if info.startswith(repo_path):
             print("hello")
+            print(info)
         else:
             print("eiei")
-            
+            print(info)
