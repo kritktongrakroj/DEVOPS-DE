@@ -19,13 +19,13 @@ print(repo)
 commits_list = list(repo.iter_commits())
 
 print(commits_list)
-print ("last commit: ", commits_list[-1])
-print ("prevois commit: ", commits_list[-2])
+print ("last commit: ", commits_list[0])
+print ("prevois commit: ", commits_list[1])
 
 changed_files = []
 
 
-for x in commits_list[-2].diff(commits_list[-1]):
+for x in commits_list[0].diff(commits_list[1]):
     if x.a_blob.path not in changed_files:
         changed_files.append(x.a_blob.path)
         
