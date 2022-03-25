@@ -11,6 +11,7 @@ import base64
 repo_path = str(sys.argv[1])
 repo_url = str(sys.argv[2])
 commitid = str(sys.argv[3])
+inputtag = str(sys.argv[4])
 
 print(repo_path)
 print(repo_url)
@@ -54,3 +55,20 @@ for info in changed_files:
             print("not interest")
             print(info)
 
+def find_tag():
+    print(inputtag)
+    taglist = repo.tags
+    print(taglist)
+
+    for tag in taglist:
+        # to match taginput and existing tag
+        #
+        if inputtag in tag:
+            print("tag match")
+            return tag
+        else:
+            print("not interest")
+            return tag
+
+x = find_tag()
+print (x)
