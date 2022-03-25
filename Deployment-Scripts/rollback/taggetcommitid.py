@@ -12,12 +12,6 @@ repo_path = str(sys.argv[1])
 repo_url = str(sys.argv[2])
 inputtag = str(sys.argv[3])
 
-print(repo_path)
-print(repo_url)
-repo = git.Repo.clone_from(repo_url, repo_path)
-print(repo)
-
-
 
 def find_tag():
     print(inputtag)
