@@ -25,7 +25,9 @@ jobs:
   Build:
     runs-on: ubuntu-latest
     env:
-       inputtag: '${{ github.event.inputs.INPUT_TAG }}'
+       input_tag: '${{ github.event.inputs.INPUT_TAG }}'
+       repo_url: 'https://github.com/kritktongrakroj/SCB.git'
+       repo_path: '${{ github.workspace }}/clonrepo'
       
     # Checkout code
     steps:
@@ -47,8 +49,11 @@ jobs:
     - name: Get commit ID from tag
       run: |
        chmod +x $GITHUB_WORKSPACE/Deployment-Scripts/rollback/taggetcommitid.py
-       python3 $GITHUB_WORKSPACE/Deployment-Scripts/rollback/taggetcommitid.py ${{ env.inputtag }}
+       python3 $GITHUB_WORKSPACE/Deployment-Scripts/rollback/taggetcommitid.py ${{ env.input_tag }} ${{ env.repo_url }} ${{ env.repo_path }}
   
+    - name: Remove temp repo
+      run:  |
+       rm -rf ${{ env.repo_path }}
 
     # Publish Artifact: Deployment-Scripts
     - name: 'Publish Artifact: Deployment-Scripts' 
