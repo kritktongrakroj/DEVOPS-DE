@@ -1,6 +1,6 @@
 
 
-name: change
+name: getcommitidbytag
 
 
 # Manual trigger with parameters
@@ -8,20 +8,11 @@ on:
   workflow_dispatch:
     inputs:
       # This is the path of your notebooks in Git.  Currently, this is not recursively deploying notebooks
-      GIT_NOTEBOOK_PATH:
-        description: 'Notebooks Relative Path in Git'
-        required: true
-        default: 'testcommit'
       
       GIT_URL:
         description: 'Repo URL'
         required: true
         default: 'https://github.com/kritktongrakroj/SCB.git'
-        
-      COMMIT_ID:
-        description: 'Commit Rollback ID'
-        required: true
-        default: '1ba561836cbec5d5c2650d35c2d8822d0fb3478c'
 
       INPUT_TAG:
         description: 'Tag name or baseline name'
@@ -59,9 +50,8 @@ jobs:
     needs: Build
     runs-on: ubuntu-latest
     env:
-       repopath: '${{ github.event.inputs.GIT_NOTEBOOK_PATH }}'
+       repopath: '${{ github.workspace }}'
        repourl: '${{ github.event.inputs.GIT_URL }}'
-       commitid: '${{ github.event.inputs.COMMIT_ID }}'
        inputtag: '${{ github.event.inputs.INPUT_TAG }}'
 
     steps:
@@ -85,7 +75,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
       
-    - name: Deploy script1
+    - name: Get commit ID from tag
       run: |
        chmod +x $GITHUB_WORKSPACE/Deployment-Scripts/rollback/deploy-rollback.py
-       python3 $GITHUB_WORKSPACE/Deployment-Scripts/rollback/deploy-rollback.py ${{ env.repopath }} ${{ env.repourl }} ${{ env.commitid }} ${{ env.inputtag }}
+       python3 $GITHUB_WORKSPACE/Deployment-Scripts/rollback/deploy-rollback.py ${{ env.repopath }} ${{ env.repourl }} ${{ env.inputtag }}  
