@@ -5,19 +5,7 @@ name: getcommitidbytag
 
 # Manual trigger with parameters
 on:
-  workflow_dispatch:
-    inputs:
-      # This is the path of your notebooks in Git.  Currently, this is not recursively deploying notebooks
-      
-      GIT_URL:
-        description: 'Repo URL'
-        required: true
-        default: 'https://github.com/kritktongrakroj/SCB.git'
-
-      INPUT_TAG:
-        description: 'Tag name or baseline name'
-        required: true
-        default: 'BSL002'
+  
 
 
 jobs:
