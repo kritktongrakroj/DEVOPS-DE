@@ -15,7 +15,7 @@ inputtag = str(sys.argv[4])
 
 print(repo_path)
 print(repo_url)
-repo = git.Repo(repo_path)
+repo = git.Repo.init(repo_path)
 print(repo)
 
 commits_list = list(repo.iter_commits())
