@@ -18,6 +18,7 @@ on:
         description: 'Tag name or baseline name'
         required: true
         default: 'BSL002'
+        
 
 
 jobs:
@@ -50,7 +51,7 @@ jobs:
     needs: Build
     runs-on: ubuntu-latest
     env:
-       repopath: '${{ github.workspace }}'
+       repopath: '${{ github.workspace }}/testcommit'
        repourl: '${{ github.event.inputs.GIT_URL }}'
        inputtag: '${{ github.event.inputs.INPUT_TAG }}'
 
