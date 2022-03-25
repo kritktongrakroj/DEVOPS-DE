@@ -12,6 +12,7 @@ repo_path = str(sys.argv[1])
 repo_url = str(sys.argv[2])
 inputtag = str(sys.argv[3])
 
+repo = git.Repo()
 
 def find_tag():
     print(inputtag)
