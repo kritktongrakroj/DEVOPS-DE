@@ -29,6 +29,11 @@ jobs:
   #############################################################
   Build:
     runs-on: ubuntu-latest
+    env:
+       repopath: '${{ github.workspace }}'
+       repourl: '${{ github.event.inputs.GIT_URL }}'
+       inputtag: '${{ github.event.inputs.INPUT_TAG }}'
+       url: 'https://github.com/kritktongrakroj/SCB.git'
       
     # Checkout code
     steps:
@@ -51,15 +56,11 @@ jobs:
     needs: Build
     runs-on: ubuntu-latest
     env:
-       repopath: '${{ github.workspace }}/testcommit'
+       repopath: '${{ github.workspace }}'
        repourl: '${{ github.event.inputs.GIT_URL }}'
        inputtag: '${{ github.event.inputs.INPUT_TAG }}'
 
     steps:
-
-    # Checkout code
-    - name: Checkout code
-      uses: actions/checkout@v2
     
     # Download Artifact: Deployment Scripts
     - name: 'Download Artifact: Deployment Scripts' 
