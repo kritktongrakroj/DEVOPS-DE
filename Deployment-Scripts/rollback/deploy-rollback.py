@@ -47,7 +47,6 @@ print(changed_files)
 
 for info in changed_files:
         #if file_path.startswith(('dp-bt', 'dp-rlt')):
-        #env_config_path = f'{config.REPO_NOTEBOOKS_DIRECTORY}/fw/cmmn/config/environment_config' # Deploy every time
         if info.startswith(repo_path):
             print("in specified folder")
             print(info)
@@ -57,12 +56,11 @@ for info in changed_files:
 
 def find_tag():
     print(inputtag)
-    taglist = list(repo.tags())
+    taglist = list(repo.tags)
     print(taglist)
 
     for tag in taglist:
-        # to match taginput and existing tag
-        #
+        # to match taginput with existing tag
         if inputtag in tag:
             print("tag match")
             print(tag)
