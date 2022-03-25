@@ -35,8 +35,8 @@ for x in commits_list[0].diff(commits_list[-1]):
     if x.b_blob is not None and x.b_blob.path not in changed_files:
         changed_files.append(x.b_blob.path)
         
-print (changed_files_firstcommit = [])
-print (changed_files_lastcommit = [])
+print (changed_files_firstcommit)
+print (changed_files_lastcommit)
 print(changed_files)
 
 for info in changed_files:
