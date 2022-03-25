@@ -65,7 +65,9 @@ jobs:
        inputtag: '${{ github.event.inputs.INPUT_TAG }}'
 
     steps:
-    
+
+    - name: Checkout code
+      uses: actions/checkout@v2
     
     # Download Artifact: Deployment Scripts
     - name: 'Download Artifact: Deployment Scripts' 
