@@ -24,10 +24,9 @@ def find_tag():
         #
         if inputtag in tag:
             print("tag match")
-            return tag
+            print(tag)
         else:
             print("not interest")
-            return tag
+            print(tag)
 
-x = find_tag()
-print (x)
+find_tag()
