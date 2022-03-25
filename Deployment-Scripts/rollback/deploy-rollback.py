@@ -57,20 +57,18 @@ for info in changed_files:
 def find_tag():
     print(inputtag)
     taglist = repo.tags
-    tagref = taglist[0]
+   
 
     print(taglist)
-    print(tagref)
+
 
     for tag in taglist:
         print("Hello")
-
-    if inputtag in taglist:
-        print("OK, tag match")
-
-
-    else:
-        print("Tag not found")
+        tagref = taglist[tag]
+        if inputtag == tagref:
+            print("OK, tag match")
+        else:
+            print("Tag not found")
 
    
 find_tag()
