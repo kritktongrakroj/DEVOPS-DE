@@ -65,7 +65,7 @@ def find_tag():
         tagref = str(taglist[i])
         if inputtag == tagref:
             print("OK, tag match")
-            print(tagref.commit)
+            print(taglist[i].commit)
         else:
             print("Tag not found")
 
