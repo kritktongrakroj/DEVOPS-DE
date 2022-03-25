@@ -49,11 +49,18 @@ jobs:
     - name: Get commit ID from tag
       run: |
        chmod +x $GITHUB_WORKSPACE/Deployment-Scripts/rollback/taggetcommitid.py
-       python3 $GITHUB_WORKSPACE/Deployment-Scripts/rollback/taggetcommitid.py ${{ env.input_tag }} ${{ env.repo_url }} ${{ env.repo_path }}
+       output=$(python3 $GITHUB_WORKSPACE/Deployment-Scripts/rollback/taggetcommitid.py ${{ env.input_tag }} ${{ env.repo_url }} ${{ env.repo_path }})
+       echo "::set-output name=commitid::$output"
+      id: set-commitid
   
     - name: Remove temp repo
       run:  |
        rm -rf ${{ env.repo_path }}
+
+    - name: Print commit id
+        run: echo "${{ steps.set-commitid.outputs.commitid }}"
+
+    
 
     # Publish Artifact: Deployment-Scripts
     - name: 'Publish Artifact: Deployment-Scripts' 
