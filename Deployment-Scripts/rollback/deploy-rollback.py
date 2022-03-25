@@ -18,7 +18,10 @@ repo = git.Repo.clone_from(repo_url, repo_path)
 print(repo)
 
 commits_list = list(repo.iter_commits())
+taglist = repo.tags
 
+
+print(taglist)
 print(commits_list)
 print ("last commit: ", commits_list[0])
 print ("selected commit: ", commitid)
