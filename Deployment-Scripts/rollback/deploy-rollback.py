@@ -27,6 +27,7 @@ changed_files_firstcommit = []
 changed_files_lastcommit = []
 
 changed_files = []
+print(commits_list[0].diff(commits_list[-1]))
 
 for x in commits_list[0].diff(commits_list[-1]):
     if x.a_blob.path not in changed_files:
