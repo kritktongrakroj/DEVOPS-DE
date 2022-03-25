@@ -59,7 +59,7 @@ jobs:
     needs: Build
     runs-on: ubuntu-latest
     env:
-       repopath: '${{ github.event.inputs.GIT_NOTEBOOK_PATH }}'
+       repopath: '${{ github.workspace }}'
        repourl: '${{ github.event.inputs.GIT_URL }}'
        commitid: '${{ github.event.inputs.COMMIT_ID }}'
        inputtag: '${{ github.event.inputs.INPUT_TAG }}'
@@ -90,6 +90,4 @@ jobs:
        chmod +x $GITHUB_WORKSPACE/Deployment-Scripts/rollback/deploy-rollback.py
        python3 $GITHUB_WORKSPACE/Deployment-Scripts/rollback/deploy-rollback.py ${{ env.repopath }} ${{ env.repourl }} ${{ env.commitid }} ${{ env.inputtag }}
 
-    - name: Remove repo
-      run: |
-       rm -rf ${{ github.workspace }}
+    
