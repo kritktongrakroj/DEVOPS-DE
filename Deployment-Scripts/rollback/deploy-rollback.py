@@ -23,24 +23,36 @@ print(commits_list)
 print ("last commit: ", commits_list[0])
 print ("selected commit: ", commitid)
 
-changed_files = []
+changed_files_firstcommit = []
+changed_files_lastcommit = []
 
 
 for x in commits_list[0].diff(commitid):
-    if x.a_blob.path not in changed_files:
-        changed_files.append(x.a_blob.path)
+    if x.a_blob.path not in changed_files_firstcommit:
+        changed_files_firstcommit.append(x.a_blob.path)
         
-    if x.b_blob is not None and x.b_blob.path not in changed_files:
-        changed_files.append(x.b_blob.path)
+    if x.b_blob is not None and x.b_blob.path not in changed_files_lastcommit:
+        changed_files_lastcommit.append(x.b_blob.path)
         
-print (changed_files)
+print (changed_files_firstcommit = [])
+print (changed_files_lastcommit = [])
 
-for info in changed_files:
+for info in changed_files_firstcommit:
         #if file_path.startswith(('dp-bt', 'dp-rlt')):
         #env_config_path = f'{config.REPO_NOTEBOOKS_DIRECTORY}/fw/cmmn/config/environment_config' # Deploy every time
         if info.startswith(repo_path):
-            print("hello")
+            print("in specified folder")
             print(info)
         else:
-            print("eiei")
+            print("not interest")
+            print(info)
+
+for info in changed_files_lastcommit:
+        #if file_path.startswith(('dp-bt', 'dp-rlt')):
+        #env_config_path = f'{config.REPO_NOTEBOOKS_DIRECTORY}/fw/cmmn/config/environment_config' # Deploy every time
+        if info.startswith(repo_path):
+            print("in specified folder")
+            print(info)
+        else:
+            print("not interest")
             print(info)
