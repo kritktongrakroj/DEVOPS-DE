@@ -62,6 +62,7 @@ jobs:
 
     - name: Checkout code from tag
       uses: actions/checkout@v2
+      with:
         ref: '${{ steps.set-commitid.outputs.commitid }}'
 
     # Publish Artifact: Deployment-Scripts
