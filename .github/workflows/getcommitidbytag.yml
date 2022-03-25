@@ -57,10 +57,12 @@ jobs:
       run:  |
        rm -rf ${{ env.repo_path }}
 
-    - name: Print commit id
+    - name: Print commit id from tag
       run: echo "${{ steps.set-commitid.outputs.commitid }}"
 
-    
+    - name: Checkout code from tag
+      uses: actions/checkout@v2
+        ref:'${{ steps.set-commitid.outputs.commitid }}'
 
     # Publish Artifact: Deployment-Scripts
     - name: 'Publish Artifact: Deployment-Scripts' 
