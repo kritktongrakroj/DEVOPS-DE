@@ -59,10 +59,12 @@ def find_tag():
     taglist = repo.tags
     tagref = taglist[0]
 
-
     print(taglist)
     print(tagref)
-    
+
+    for tag in taglist:
+        print("Hello")
+
     if inputtag in taglist:
         print("OK, tag match")
 
