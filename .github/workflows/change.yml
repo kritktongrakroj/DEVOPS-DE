@@ -23,6 +23,11 @@ on:
         required: true
         default: '1ba561836cbec5d5c2650d35c2d8822d0fb3478c'
 
+      INPUT_TAG:
+        description: 'Tag name or baseline name'
+        required: true
+        default: 'BSL002'
+
 
 jobs:
   #############################################################
@@ -57,6 +62,7 @@ jobs:
        repopath: '${{ github.event.inputs.GIT_NOTEBOOK_PATH }}'
        repourl: '${{ github.event.inputs.GIT_URL }}'
        commitid: '${{ github.event.inputs.COMMIT_ID }}'
+       inputtag: '${{ github.event.inputs.INPUT_TAG }}'
 
     steps:
     
@@ -79,7 +85,12 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
       
-    - name: Deploy script
+    - name: Deploy script1
       run: |
        chmod +x $GITHUB_WORKSPACE/Deployment-Scripts/rollback/deploy-rollback.py
        python3 $GITHUB_WORKSPACE/Deployment-Scripts/rollback/deploy-rollback.py ${{ env.repopath }} ${{ env.repourl }} ${{ env.commitid }}
+
+    - name: Deploy script2
+      run: |
+       chmod +x $GITHUB_WORKSPACE/Deployment-Scripts/rollback/taggetcommitid.py
+       python3 $GITHUB_WORKSPACE/Deployment-Scripts/rollback/taggetcommitid.py ${{ env.repopath }} ${{ env.repourl }} ${{ env.inputtag }}
