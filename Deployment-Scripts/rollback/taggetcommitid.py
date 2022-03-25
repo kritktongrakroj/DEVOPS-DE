@@ -8,15 +8,10 @@ import base64
 ############################
 
 
-repo_path = str(sys.argv[1])
-repo_url = str(sys.argv[2])
-inputtag = str(sys.argv[3])
+inputtag = str(sys.argv[1])
 
-print(repo_path)
-print(repo_url)
-repo = git.Repo.clone_from(repo_url, repo_path)
+repo = git.Repo()
 print(repo)
-
 
 def find_tag():
     print("Our input tag name",inputtag)

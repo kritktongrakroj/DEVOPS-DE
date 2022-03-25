@@ -5,18 +5,7 @@ name: Test-CommitID-Dev
 on:
   workflow_dispatch:
     inputs:
-      # This to test notebook path
-      GIT_NOTEBOOK_PATH:
-        description: 'Notebooks Relative Path in Git'
-        required: true
-        default: 'testcommit/'
-        
 
-      # This is commit id value
-      COMMIT_ID:
-        description: 'Commit ID'
-        required: true
-        default: '1e184eba51c7b408bdc7924498446e52e91b5aa7'
 
       # This is commit id value
       BASELINE_ID:

@@ -8,11 +8,6 @@ on:
   workflow_dispatch:
     inputs:
       # This is the path of your notebooks in Git.  Currently, this is not recursively deploying notebooks
-      
-      GIT_URL:
-        description: 'Repo URL'
-        required: true
-        default: 'https://github.com/kritktongrakroj/SCB.git'
 
       INPUT_TAG:
         description: 'Tag name or baseline name'
@@ -30,16 +25,30 @@ jobs:
   Build:
     runs-on: ubuntu-latest
     env:
-       repopath: '${{ github.workspace }}'
-       repourl: '${{ github.event.inputs.GIT_URL }}'
        inputtag: '${{ github.event.inputs.INPUT_TAG }}'
-       url: 'https://github.com/kritktongrakroj/SCB.git'
       
     # Checkout code
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
+
+
+    - name: setup python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8 #install the python needed
       
+    - name: Install dependencies
+      run: |
+        cd "$GITHUB_WORKSPACE/Deployment-Scripts/rollback"
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+      
+    - name: Get commit ID from tag
+      run: |
+       chmod +x $GITHUB_WORKSPACE/Deployment-Scripts/rollback/taggetcommitid.py
+       python3 $GITHUB_WORKSPACE/Deployment-Scripts/rollback/taggetcommitid.py ${{ env.inputtag }}
+  
 
     # Publish Artifact: Deployment-Scripts
     - name: 'Publish Artifact: Deployment-Scripts' 
@@ -56,8 +65,7 @@ jobs:
     needs: Build
     runs-on: ubuntu-latest
     env:
-       repopath: '${{ github.workspace }}'
-       repourl: '${{ github.event.inputs.GIT_URL }}'
+
        inputtag: '${{ github.event.inputs.INPUT_TAG }}'
 
     steps:
@@ -69,18 +77,4 @@ jobs:
         name: 'deployment-scripts'
         path: ${{ github.workspace }}/Deployment-Scripts/rollback
 
-    - name: setup python
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.8 #install the python needed
-      
-    - name: Install dependencies
-      run: |
-        cd "$GITHUB_WORKSPACE/Deployment-Scripts/rollback"
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-      
-    - name: Get commit ID from tag
-      run: |
-       chmod +x $GITHUB_WORKSPACE/Deployment-Scripts/rollback/taggetcommitid.py
-       python3 $GITHUB_WORKSPACE/Deployment-Scripts/rollback/taggetcommitid.py ${{ env.repopath }} ${{ env.repourl }} ${{ env.inputtag }}
+    
