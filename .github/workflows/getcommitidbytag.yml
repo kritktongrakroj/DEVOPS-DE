@@ -58,7 +58,7 @@ jobs:
        rm -rf ${{ env.repo_path }}
 
     - name: Print commit id
-        run: echo "${{ steps.set-commitid.outputs.commitid }}"
+      run: echo "${{ steps.set-commitid.outputs.commitid }}"
 
     
 
