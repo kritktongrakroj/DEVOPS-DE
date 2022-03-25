@@ -66,8 +66,10 @@ def find_tag():
         if inputtag == tagref:
             print("OK, tag match")
             print("Commit id related to tag ",taglist[i].commit)
+            return taglist[i].commit
         else:
             print("Tag not found")
 
    
-find_tag()
+commitidfromtag = find_tag()
+print (commitidfromtag)
