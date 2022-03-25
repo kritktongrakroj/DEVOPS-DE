@@ -57,7 +57,7 @@ for info in changed_files:
 
 def find_tag():
     print(inputtag)
-    taglist = repo.tags
+    taglist = list(repo.tags())
     print(taglist)
 
     for tag in taglist:
@@ -69,4 +69,6 @@ def find_tag():
         else:
             print("not interest")
             print(tag)
+
+   
 find_tag()
