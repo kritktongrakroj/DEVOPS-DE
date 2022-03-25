@@ -55,7 +55,7 @@ for info in changed_files:
             print(info)
 
 def find_tag():
-    print(inputtag)
+    print("Our input tag name",inputtag)
     taglist = repo.tags
     print(taglist)
 
@@ -65,7 +65,7 @@ def find_tag():
         tagref = str(taglist[i])
         if inputtag == tagref:
             print("OK, tag match")
-            print(taglist[i].commit)
+            print("Commit id related to tag ",taglist[i].commit)
         else:
             print("Tag not found")
 
