@@ -12,21 +12,28 @@ repo_path = str(sys.argv[1])
 repo_url = str(sys.argv[2])
 inputtag = str(sys.argv[3])
 
-repo = git.Repo()
+print(repo_path)
+print(repo_url)
+repo = git.Repo.clone_from(repo_url, repo_path)
+print(repo)
+
 
 def find_tag():
-    print(inputtag)
+    print("Our input tag name",inputtag)
     taglist = repo.tags
     print(taglist)
 
-    for tag in taglist:
-        # to match taginput and existing tag
-        #
-        if inputtag in tag:
-            print("tag match")
-            print(tag)
+    for i in range(len(taglist)):
+        
+        print(taglist[i])
+        tagref = str(taglist[i])
+        if inputtag == tagref:
+            print("OK, tag match")
+            print("Commit id related to tag ",taglist[i].commit)
+            return taglist[i].commit
         else:
-            print("not interest")
-            print(tag)
+            print("Tag not found")
 
-find_tag()
+   
+commitidfromtag = find_tag()
+print (commitidfromtag)
