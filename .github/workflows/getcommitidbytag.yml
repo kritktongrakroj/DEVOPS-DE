@@ -78,4 +78,4 @@ jobs:
     - name: Get commit ID from tag
       run: |
        chmod +x $GITHUB_WORKSPACE/Deployment-Scripts/rollback/deploy-rollback.py
-       python3 $GITHUB_WORKSPACE/Deployment-Scripts/rollback/deploy-rollback.py ${{ env.repopath }} ${{ env.repourl }} ${{ env.inputtag }}
+       python3 $GITHUB_WORKSPACE/Deployment-Scripts/rollback/deploy-rollback.py ${{ env.repopath }} ${{ env.repourl }} ${{ env.inputtag }}  
