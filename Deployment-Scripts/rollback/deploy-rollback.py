@@ -62,7 +62,8 @@ def find_tag():
     for i in range(len(taglist)):
         
         print(taglist[i])
-        if inputtag in taglist[i]:
+        tagref = str(taglist[i])
+        if inputtag == tagref:
             print("OK, tag match")
         else:
             print("Tag not found")
