@@ -39,17 +39,16 @@ print("this is commit from tag :",commitidfromtag)
 def find_seq():
 
     for i in range(len(commits_list)):
-        #matching tag
-        #print(taglist[i])
-    
         if commitidfromtag == commits_list[i]:
-            print("OK, get seq", i)
-
             return i
             break
 
+
+
+
+
 seq = find_seq()
-print()
+print(seq)
 
 # show all commit list in branch
 print(commits_list)
