@@ -24,15 +24,18 @@ print(repo)
 
 
 
-#commits_list = list(repo.iter_commits(branchname,max_count=20))
+commits_list = list(repo.iter_commits())
 commitidfromtag = repo.commit(inputtag)
-repodif = repo.git.diff(commitidfromtag)
 
-print (list(repo.iter_commits(paths=notebook_path)))
+diff_index = commitidfromtag.diff(commits_list[-1])
+print(diff_index)
+for diff_item in diff_index.iter_change_type('M'):
+    print("A blob:\n{}".format(diff_item.a_blob.data_stream.read().decode('utf-8')))
+    print("B blob:\n{}".format(diff_item.b_blob.data_stream.read().decode('utf-8'))) 
 
 #print(commits_list)
 #print ("last commit: ", commits_list[-1])
-print ("rollback selected commit: ", commitidfromtag)
+#print ("rollback selected commit: ", commitidfromtag)
 
 
 changed_files = set()
