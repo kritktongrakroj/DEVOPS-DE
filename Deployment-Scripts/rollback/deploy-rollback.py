@@ -21,9 +21,27 @@ print(repo)
 commits_list = list(repo.iter_commits())
 
 
+
+
+def find_tag():
+    taglist = repo.tags
+
+    for i in range(len(taglist)):
+
+        tagref = str(taglist[i])
+        if inputtag == tagref:
+
+            return taglist[i].commit
+            break
+
+commitidfromtag = find_tag()
+print("Commit id from tag is :", commitidfromtag)
+
 print(commits_list)
 print ("last commit: ", commits_list[0])
-print ("rollback selected commit: ", inputtag)
+print ("rollback selected commit: ", commitidfromtag)
+
+
 
 changed_files_firstcommit = []
 changed_files_lastcommit = []
@@ -50,23 +68,3 @@ for info in changed_files:
         else:
             print("not interest")
             print(info)
-
-def find_tag():
-    print("Our input tag name",inputtag)
-    taglist = repo.tags
-    print(taglist)
-
-    for i in range(len(taglist)):
-        
-        print(taglist[i])
-        tagref = str(taglist[i])
-        if inputtag == tagref:
-            print("OK, tag match")
-            print("Commit id related to tag ",taglist[i].commit)
-            return taglist[i].commit
-        else:
-            print("Tag not found")
-
-   
-commitidfromtag = find_tag()
-print (commitidfromtag)
