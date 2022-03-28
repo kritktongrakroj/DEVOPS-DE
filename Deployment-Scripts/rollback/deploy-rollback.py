@@ -36,6 +36,13 @@ print("this is commit from tag :",commitidfromtag)
 
 for commit in repo.iter_commits(branchname):
     print(commit)
+
+    #diff from the tag
+    diffs  = {
+            diff.a_path: diff for diff in commit.diff(commitidfromtag)
+            }
+
+    print(diffs)
  
 
 
