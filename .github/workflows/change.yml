@@ -7,12 +7,6 @@ name: change
 on:
   workflow_dispatch:
     inputs:
-
-      foo:
-        description: Whether to foo
-        type: boolean
-        required: false
-        default: false
       # This is the path of your notebooks in Git.  Currently, this is not recursively deploying notebooks
       GIT_NOTEBOOK_PATH:
         description: 'Notebooks Relative Path in Git'
