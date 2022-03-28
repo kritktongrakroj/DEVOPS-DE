@@ -33,16 +33,12 @@ repo.git.checkout(branchname)
 commitidfromtag = repo.commit(inputtag)
 print("this is commit from tag :",commitidfromtag)
 
+allcommit = repo.iter_commits(branchname)
 
-for commit in repo.iter_commits(branchname):
-    print(commit)
+diffs = { diff.a_path: diff for diff in allcommit[0].diff(commitidfromtag) }
 
-    #diff from the tag
-    diffs  = {
-            diff.a_path: diff for diff in commit.diff(commitidfromtag)
-            }
 
-    print(diffs)
+print(diffs)
  
 
 
