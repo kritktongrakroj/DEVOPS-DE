@@ -20,31 +20,15 @@ print(repo_url)
 
 repo = git.Repo.clone_from(repo_url, repo_path)
 print(repo)
-print(repo.commit(inputtag))
-branch = repo.git.checkout(branchname)
-
-commits_list = list(repo.iter_commits())
 
 
-###########################################
 
-def find_tag():
-    taglist = repo.tags
+commits_list = list(repo.iter_commits(branchname,max_count=20))
+commitidfromtag = repo.commit(inputtag)
+repodif = repo.git.diff(commitidfromtag)
 
-    for i in range(len(taglist)):
 
-        tagref = str(taglist[i])
-        if inputtag == tagref:
-
-            return taglist[i].commit
-            break
-
-commitidfromtag = find_tag()
-print("Commit id from tag is :", commitidfromtag)
-
-#########################################
-    
-print(commits_list)
+#print(commits_list)
 print ("last commit: ", commits_list[-1])
 print ("rollback selected commit: ", commitidfromtag)
 
