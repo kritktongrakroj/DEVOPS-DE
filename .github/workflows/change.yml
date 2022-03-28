@@ -9,6 +9,11 @@ on:
     inputs:
       # This is the path of your notebooks in Git.  Currently, this is not recursively deploying notebooks
       
+      GIT_NOTEBOOK_PATH:
+        description: 'Notebooks Relative Path in Git'
+        required: true
+        default: 'testcommit'
+
       GIT_URL:
         description: 'Repo URL'
         required: true
@@ -18,7 +23,7 @@ on:
       INPUT_TAG:
         description: 'Tag name or baseline name'
         required: true
-        default: 'BSL002'
+        default: 'BSL003'
 
 
 jobs:
@@ -33,6 +38,7 @@ jobs:
        temp_repo_path: '${{ github.workspace }}/clonrepo'
        repo_url: '${{ github.event.inputs.GIT_URL }}'
        input_tag: '${{ github.event.inputs.INPUT_TAG }}'
+       notebookpath: '${{ github.workspace }}/${{ github.event.inputs.GIT_NOTEBOOK_PATH }}'
       
     # Checkout code
     steps:
@@ -53,7 +59,7 @@ jobs:
     - name: Deploy script1
       run: |
        chmod +x $GITHUB_WORKSPACE/Deployment-Scripts/rollback/deploy-rollback.py
-       python3 $GITHUB_WORKSPACE/Deployment-Scripts/rollback/deploy-rollback.py ${{ env.input_tag }} ${{ env.repo_url }} ${{ env.temp_repo_path }}
+       python3 $GITHUB_WORKSPACE/Deployment-Scripts/rollback/deploy-rollback.py ${{ env.input_tag }} ${{ env.repo_url }} ${{ env.temp_repo_path }} ${{ env.notebookpath }}
       
 
     # Publish Artifact: Deployment-Scripts
