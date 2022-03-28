@@ -19,9 +19,8 @@ print(repo_path)
 print(repo_url)
 repo = git.Repo.clone_from(repo_url, repo_path)
 print(repo)
-branch = repo.git.checkout(branchname)
 
-commits_list = list(repo.iter_commits(branch))
+commits_list = list(repo.iter_commits())
 
 
 ###########################################
