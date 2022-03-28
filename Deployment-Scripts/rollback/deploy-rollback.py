@@ -27,6 +27,8 @@ print(repo)
 # Get all commit list
 #commits_list = list(repo.iter_commits())
 
+repo.git.checkout(branchname)
+
 # get commit id from tag
 commitidfromtag = repo.commit(inputtag)
 print("this is commit from tag :",commitidfromtag)
