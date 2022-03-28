@@ -43,7 +43,7 @@ print("Commit id from tag is :", commitidfromtag)
 def find_commitseq():
     for j in range(len(commits_list)):
 
-        each_commit = str(commits_list[i])
+        each_commit = str(commits_list[j])
         if each_commit == commitidfromtag:
             print ("Hey we found the commit :", j)
             return j
