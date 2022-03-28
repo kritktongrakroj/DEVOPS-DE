@@ -1,3 +1,4 @@
+from sre_constants import BRANCH
 import git
 import sys
 import os
@@ -19,11 +20,12 @@ print(repo_path)
 print(repo_url)
 print(notebook_path)
 
+
 repo = git.Repo.clone_from(repo_url, repo_path)
 print(repo)
 
 
-
+repo.git.checkout(branchname)
 commits_list = list(repo.iter_commits())
 commitidfromtag = repo.commit(inputtag)
 
@@ -33,7 +35,7 @@ for diff_item in diff_index.iter_change_type('M'):
     print("A blob:\n{}".format(diff_item.a_blob.data_stream.read().decode('utf-8')))
     print("B blob:\n{}".format(diff_item.b_blob.data_stream.read().decode('utf-8'))) 
 
-#print(commits_list)
+print(commits_list)
 #print ("last commit: ", commits_list[-1])
 #print ("rollback selected commit: ", commitidfromtag)
 
