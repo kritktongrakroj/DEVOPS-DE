@@ -24,24 +24,18 @@ print(notebook_path)
 repo = git.Repo.clone_from(repo_url, repo_path)
 print(repo)
 
-
-# checkout to branch
-repo.git.checkout(branchname)
-
 # Get all commit list
-commits_list = list(repo.iter_commits())
+#commits_list = list(repo.iter_commits())
 
 # get commit id from tag
 commitidfromtag = repo.commit(inputtag)
 print("this is commit from tag :",commitidfromtag)
 
-#find mapping sequence of commit id
-def find_seq():
 
-    for i in range(len(commits_list)):
-        if commitidfromtag == commits_list[i]:
-            return i
-            break
+for commit in repo.iter_commits(branchname):
+    print(commit)
+ 
+
 
 
         
@@ -49,21 +43,9 @@ def find_seq():
 
 
 
-seq = int(find_seq())
-print(seq)
-
-# show all commit list in branch
-print(commits_list)
 
 
-changed_files = []
 
-for x in commits_list[-1].diff(commits_list[seq]):
-    if x.a_blob.path not in changed_files:
-        changed_files.append(x.a_blob.path)
-        
-    if x.b_blob is not None and x.b_blob.path not in changed_files:
-        changed_files.append(x.b_blob.path)
 
 
 
