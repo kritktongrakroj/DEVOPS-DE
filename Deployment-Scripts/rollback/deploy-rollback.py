@@ -17,8 +17,11 @@ branchname = str(sys.argv[5])
 print(branchname)
 print(repo_path)
 print(repo_url)
+
 repo = git.Repo.clone_from(repo_url, repo_path)
 print(repo)
+print(repo.commit(inputtag))
+branch = repo.git.checkout(branchname)
 
 commits_list = list(repo.iter_commits())
 
