@@ -10,10 +10,10 @@ on:
       # This is the path of your notebooks in Git.  Currently, this is not recursively deploying notebooks
 
       INPUT_TAG:
-        description: 'Tag name or baseline name'
+        description: 'Specified Tag name or baseline name'
         required: true
         default: 'BSL002'
-        
+       
 
 
 jobs:
