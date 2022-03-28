@@ -14,7 +14,7 @@ repo_path = str(sys.argv[3])
 notebook_path = str(sys.argv[4])
 branchname = str(sys.argv[5])
 
-
+print(branchname)
 print(repo_path)
 print(repo_url)
 repo = git.Repo.clone_from(repo_url, repo_path)

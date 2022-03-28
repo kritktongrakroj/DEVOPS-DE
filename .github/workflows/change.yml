@@ -25,10 +25,6 @@ on:
         required: true
         default: 'BSL003'
 
-      BRANCH:
-        description: 'Branch name'
-        required: true
-        default: 'RELEASEID001'
 
 
 jobs:
@@ -44,7 +40,7 @@ jobs:
        repo_url: '${{ github.event.inputs.GIT_URL }}'
        input_tag: '${{ github.event.inputs.INPUT_TAG }}'
        notebookpath: '${{ github.workspace }}/${{ github.event.inputs.GIT_NOTEBOOK_PATH }}'
-       branch_name: '${{ github.event.inputs.BRANCH }}'
+       branch_name: '${{ github.ref }}'
       
     # Checkout code
     steps:
