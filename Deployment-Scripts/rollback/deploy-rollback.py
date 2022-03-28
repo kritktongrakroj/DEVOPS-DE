@@ -17,6 +17,7 @@ branchname = str(sys.argv[5])
 print(branchname)
 print(repo_path)
 print(repo_url)
+print(notebook_path)
 
 repo = git.Repo.clone_from(repo_url, repo_path)
 print(repo)
@@ -26,8 +27,8 @@ print(repo)
 #commits_list = list(repo.iter_commits(branchname,max_count=20))
 commitidfromtag = repo.commit(inputtag)
 repodif = repo.git.diff(commitidfromtag)
-print(repodif)
 
+print (list(repo.iter_commits(paths=notebook_path)))
 
 #print(commits_list)
 #print ("last commit: ", commits_list[-1])
