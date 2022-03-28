@@ -41,21 +41,18 @@ def find_seq():
     for i in range(len(commits_list)):
         #matching tag
         #print(taglist[i])
-        eachcommit = str(commits_list[i])
-        if commitidfromtag == eachcommit:
+    
+        if commitidfromtag == commits_list[i]:
             print("OK, get seq", i)
 
             return i
             break
-# send back commit id
 
 seq = find_seq()
+print()
 
 # show all commit list in branch
 print(commits_list)
-
-#print ("last commit: ", commits_list[-1])
-#print ("rollback selected commit: ", commitidfromtag)
 
 
 
