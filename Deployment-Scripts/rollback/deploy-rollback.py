@@ -44,14 +44,26 @@ def find_seq():
             break
 
 
+        
 
 
 
-seq = find_seq()
+
+seq = int(find_seq())
 print(seq)
 
 # show all commit list in branch
 print(commits_list)
+
+
+changed_files = []
+
+for x in commits_list[-1].diff(commits_list[seq]):
+    if x.a_blob.path not in changed_files:
+        changed_files.append(x.a_blob.path)
+        
+    if x.b_blob is not None and x.b_blob.path not in changed_files:
+        changed_files.append(x.b_blob.path)
 
 
 
