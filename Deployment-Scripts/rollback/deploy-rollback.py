@@ -20,14 +20,37 @@ print(repo_path)
 print(repo_url)
 print(notebook_path)
 
-
+#get repo
 repo = git.Repo.clone_from(repo_url, repo_path)
 print(repo)
 
 
+# checkout to branch
 repo.git.checkout(branchname)
+
+# Get all commit list
 commits_list = list(repo.iter_commits())
+
+# get commit id from tag
 commitidfromtag = repo.commit(inputtag)
+print("this is commit from tag :",commitidfromtag)
+
+#find mapping sequence of commit id
+def find_seq():
+
+    for i in range(len(commits_list)):
+        #matching tag
+        #print(taglist[i])
+        eachcommit = str(commits_list[i])
+        if commitidfromtag == eachcommit:
+            print("OK, get seq", i)
+
+            return i
+            break
+# send back commit id
+
+seq = find_seq()
+
 
 print(commits_list)
 
