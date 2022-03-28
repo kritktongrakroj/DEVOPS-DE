@@ -47,17 +47,17 @@ print ("last commit: ", commits_list[-1])
 print ("rollback selected commit: ", commitidfromtag)
 
 
-changed_files = []
+changed_files = set()
 notebook_change_file = []
 
 print(commits_list[0].diff(commitidfromtag))
 
 for x in commits_list[0].diff(commitidfromtag):
-    if x.a_blob.path not in changed_files:
-        changed_files.append(x.a_blob.path)
+    if x.a_blob.path:
+        changed_files.add(x.a_blob.path)
         
-    if x.b_blob is not None and x.b_blob.path not in changed_files:
-        changed_files.append(x.b_blob.path)
+    if x.b_blob.path:
+        changed_files.add(x.b_blob.path)
         
 print(changed_files)
 
