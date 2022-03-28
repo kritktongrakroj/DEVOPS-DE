@@ -21,7 +21,7 @@ print(repo)
 commits_list = list(repo.iter_commits())
 
 
-
+###########################################
 
 def find_tag():
     taglist = repo.tags
@@ -37,11 +37,26 @@ def find_tag():
 commitidfromtag = find_tag()
 print("Commit id from tag is :", commitidfromtag)
 
+
+
+
+def find_commitseq():
+    for j in range(len(commits_list)):
+
+        each_commit = str(commits_list[i])
+        if each_commit == commitidfromtag:
+            print ("Hey we found the commit :", j)
+            return j
+            break
+
+commit_seq = find_commitseq()
+
+#########################################
+    
+
 print(commits_list)
 print ("last commit: ", commits_list[0])
 print ("rollback selected commit: ", commitidfromtag)
-
-
 
 changed_files_firstcommit = []
 changed_files_lastcommit = []
