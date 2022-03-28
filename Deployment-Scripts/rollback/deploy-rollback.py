@@ -48,9 +48,9 @@ changed_files_lastcommit = []
 
 changed_files = []
 
-print(commits_list[0].diff(commitidfromtag)
+print(commits_list[0].diff(commitidfromtag))
 
-for x in commits_list[0].diff(commits_list[-1]):
+for x in commits_list[0].diff(commitidfromtag):
     if x.a_blob.path not in changed_files:
         changed_files.append(x.a_blob.path)
         
