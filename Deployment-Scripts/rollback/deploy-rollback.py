@@ -31,15 +31,33 @@ repo.git.checkout(branchname)
 
 # get commit id from tag
 commitidfromtag = repo.commit(inputtag)
+lastcommit = repo.head.commit
 print("this is commit from tag :",commitidfromtag)
+print("this is last commit: ", lastcommit)
+
+
 
 allcommit = repo.iter_commits(branchname)
 
-diffs = { diff.a_path: diff for diff in allcommit[0].diff(commitidfromtag) }
+
+for commit in repo.iter_commits(branchname):
+    print(commit)
+
+    #diff from the tag
+    diffs  = {
+            diff.a_path: diff for diff in commit.diff(commitidfromtag)
+            }
+    for objpath, stats in commit.stats.files.items():
+        diff = diffs.get(objpath)
+
+        if commit == lastcommit:
+            if not diff:
+                for diff in diffs.values():
+                    if diff.b_path == repo_path and diff.renamed:
+                        print(diff.b_path)
+                        break
 
 
-print(diffs)
- 
 
 
 
