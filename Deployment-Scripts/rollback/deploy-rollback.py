@@ -26,6 +26,7 @@ print(repo)
 commits_list = list(repo.iter_commits(branchname,max_count=20))
 commitidfromtag = repo.commit(inputtag)
 repodif = repo.git.diff(commitidfromtag)
+print(repodif)
 
 
 #print(commits_list)
