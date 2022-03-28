@@ -25,6 +25,11 @@ on:
         required: true
         default: 'BSL003'
 
+      BRANCH:
+        description: 'Branch name'
+        required: true
+        default: 'RELEASEID001'
+
 
 jobs:
   #############################################################
@@ -39,6 +44,7 @@ jobs:
        repo_url: '${{ github.event.inputs.GIT_URL }}'
        input_tag: '${{ github.event.inputs.INPUT_TAG }}'
        notebookpath: '${{ github.workspace }}/${{ github.event.inputs.GIT_NOTEBOOK_PATH }}'
+       branch_name: '${{ github.event.inputs.BRANCH }}'
       
     # Checkout code
     steps:
@@ -59,7 +65,7 @@ jobs:
     - name: Deploy script1
       run: |
        chmod +x $GITHUB_WORKSPACE/Deployment-Scripts/rollback/deploy-rollback.py
-       python3 $GITHUB_WORKSPACE/Deployment-Scripts/rollback/deploy-rollback.py ${{ env.input_tag }} ${{ env.repo_url }} ${{ env.temp_repo_path }} ${{ env.notebookpath }}
+       python3 $GITHUB_WORKSPACE/Deployment-Scripts/rollback/deploy-rollback.py ${{ env.input_tag }} ${{ env.repo_url }} ${{ env.temp_repo_path }} ${{ env.notebookpath }} ${{ env.branch_name }}
       
 
     # Publish Artifact: Deployment-Scripts

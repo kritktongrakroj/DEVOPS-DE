@@ -12,12 +12,14 @@ inputtag = str(sys.argv[1])
 repo_url = str(sys.argv[2])
 repo_path = str(sys.argv[3])
 notebook_path = str(sys.argv[4])
+branchname = str(sys.argv[5])
 
 
 print(repo_path)
 print(repo_url)
 repo = git.Repo.clone_from(repo_url, repo_path)
 print(repo)
+branch = repo.git.checkput('branchname')
 
 commits_list = list(repo.iter_commits())
 
@@ -47,6 +49,8 @@ print ("rollback selected commit: ", commitidfromtag)
 
 changed_files = []
 notebook_change_file = []
+
+print(commits_list[0].diff(commitidfromtag))
 
 for x in commits_list[0].diff(commitidfromtag):
     if x.a_blob.path not in changed_files:
