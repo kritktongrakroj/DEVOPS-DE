@@ -37,32 +37,18 @@ def find_tag():
 commitidfromtag = find_tag()
 print("Commit id from tag is :", commitidfromtag)
 
-
-
-
-def find_commitseq():
-    for j in range(len(commits_list)):
-
-        each_commit = str(commits_list[j])
-        if each_commit == commitidfromtag:
-            print ("Hey we found the commit :", j)
-            return j
-            break
-
-commit_seq = find_commitseq()
-
 #########################################
     
-
 print(commits_list)
-print ("last commit: ", commits_list[0])
+print ("last commit: ", commits_list[-1])
 print ("rollback selected commit: ", commitidfromtag)
 
 changed_files_firstcommit = []
 changed_files_lastcommit = []
 
 changed_files = []
-print(commits_list[0].diff(commits_list[-1]))
+
+print(commits_list[0].diff(commitidfromtag)
 
 for x in commits_list[0].diff(commits_list[-1]):
     if x.a_blob.path not in changed_files:
