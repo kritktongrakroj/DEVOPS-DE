@@ -38,7 +38,7 @@ print(commits_list)
 changed_files = []
 notebook_change_file = []
 
-for x in commits_list[0].diff(commits_list[-1]):
+for x in commits_list[0].diff(commitidfromtag):
     if x.a_blob.path not in changed_files:
         changed_files.append(x.a_blob.path)
         
@@ -47,16 +47,15 @@ for x in commits_list[0].diff(commits_list[-1]):
 
 print (changed_files)
 
-#print(commits_list[0].diff(commits_list[-1]))
 
-#for x in commits_list[0].diff(commits_list[-1]):
-    #if x.a_blob.path:
-        #changed_files.add(x.a_blob.path)
-        
-    #if x.b_blob.path:
-        #changed_files.add(x.b_blob.path)
-        
-#print(changed_files)
+for i in range(len(changed_files)):
+        #matching tag
+        #print(taglist[i])
+        path = str(changed_files[i])
+        if path.startswith(notebook_path):
+            print("Hello this is path match")
+            print (path)
+            break
 
 #for info in changed_files:
 #        if info.startswith(notebook_path):
