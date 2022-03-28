@@ -50,9 +50,9 @@ print ("rollback selected commit: ", commitidfromtag)
 changed_files = set()
 notebook_change_file = []
 
-print(commits_list[-1].diff(commitidfromtag))
+print(commits_list[0].diff(commits_list[-1]))
 
-for x in commits_list[0].diff(commitidfromtag):
+for x in commits_list[0].diff(commits_list[-1]):
     if x.a_blob.path:
         changed_files.add(x.a_blob.path)
         
