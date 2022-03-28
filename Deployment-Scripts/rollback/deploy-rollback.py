@@ -29,19 +29,21 @@ repo.git.checkout(branchname)
 commits_list = list(repo.iter_commits())
 commitidfromtag = repo.commit(inputtag)
 
-diff_index = commitidfromtag.diff(commits_list[-1])
-
-for diff_item in diff_index.iter_change_type('M'):
-    print("A blob:\n{}".format(diff_item.a_blob.data_stream.read().decode('utf-8')))
-    print("B blob:\n{}".format(diff_item.b_blob.data_stream.read().decode('utf-8'))) 
-
 print(commits_list)
+
 #print ("last commit: ", commits_list[-1])
 #print ("rollback selected commit: ", commitidfromtag)
 
 
-changed_files = set()
+changed_files = []
 notebook_change_file = []
+
+for x in commits_list[0].diff(commits_list[-1]):
+    if x.a_blob.path not in changed_files:
+        changed_files.append(x.a_blob.path)
+        
+    if x.b_blob is not None and x.b_blob.path not in changed_files:
+        changed_files.append(x.b_blob.path)
 
 #print(commits_list[0].diff(commits_list[-1]))
 
