@@ -28,7 +28,7 @@ commits_list = list(repo.iter_commits())
 commitidfromtag = repo.commit(inputtag)
 
 diff_index = commitidfromtag.diff(commits_list[-1])
-print(diff_index)
+
 for diff_item in diff_index.iter_change_type('M'):
     print("A blob:\n{}".format(diff_item.a_blob.data_stream.read().decode('utf-8')))
     print("B blob:\n{}".format(diff_item.b_blob.data_stream.read().decode('utf-8'))) 
