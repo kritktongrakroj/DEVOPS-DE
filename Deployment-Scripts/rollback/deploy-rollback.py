@@ -56,9 +56,13 @@ else:
     for x in latestcommit.diff(commitidfromtag):
         if x.a_path not in changed_files:
             changed_files.append(x.a_path)
+            print("file path :", x.a_path)
+            print("Change type :" ,x.change_type)
             
         if x.b_path is not None and x.b_path not in changed_files:
             changed_files.append(x.b_path)
+            print("file path :", x.a_path)
+            print("Change type :" ,x.change_type)
             
     print (changed_files)
             
