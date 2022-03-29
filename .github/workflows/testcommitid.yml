@@ -1,17 +1,57 @@
-name: Test-CommitID-Dev
 
+                   
+name: adb-cicd-pipeline-partial
 
 # Manual trigger with parameters
 on:
   workflow_dispatch:
     inputs:
-
-
-      # This is commit id value
-      BASELINE_ID:
-        description: 'Baseline ID'
+      # This is the path of your notebooks in Git.  Currently, this is not recursively deploying notebooks
+      GIT_NOTEBOOK_PATH:
+        description: 'Notebooks Relative Path in Git'
         required: true
-        default: 'BSL..'
+        default: 'notebooks/CARDX'
+
+      # This is where in your Databricks workspace your notebooks will be deployed
+      # Typically this is under a Folder under the Workspace and not under a specific user's folder
+      NOTEBOOK_DEPLOYMENT_PATH:
+        description: 'Notebooks Deployment Path to Databricks'
+        required: true
+        default: '/TEST_CREATE'
+
+      # This resource group for the Databricks workspace and KeyVault
+      RESOURCE_GROUP:
+        description: 'Resource Group Name'
+        required: true
+        default: 'devops-gitenterprise-adb'
+
+      # This is the name of your Azure Databricks resource
+      WORKSPACE_NAME:
+        description: 'Databricks workspace name'
+        required: true
+        default: 'devops-demo-adb'
+
+      # This is a KeyVault for holding the Service Principal to make Databricks API calls and to hold Databricks KeyVault backed Secrets
+      #SUBSCRIPTION_ID:
+        #description: 'Azure Subscription Id'
+        #required: true
+        #default: '2546a5d7-a653-480f-a60a-a043b9a6f7b3'
+      
+      CLUSTER_NAME:
+        description: 'Name of Azure Databricks Cluster'
+        required: true
+        default: 'test-cluster'
+
+      INITIAL_DEPLOY:
+        description: First time to deploy this notebook?
+        type: boolean
+        required: true
+        default: false
+
+      INPUT_TAG:
+        description: 'Tag name'
+        required: true
+        default: 'BSL005'
 
 jobs:
   #############################################################
@@ -21,18 +61,85 @@ jobs:
   #############################################################
   Build:
     runs-on: ubuntu-latest
+    env:
+       input_tag: '${{ github.event.inputs.INPUT_TAG }}'
+       repo_url: 'https://github.com/kritktongrakroj/SCB.git'
+       repo_path: '${{ github.workspace }}/clonrepo'
 
     # Checkout code
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
       with:
-        ref: '${{ github.event.inputs.COMMIT_ID }}'
+        ref: '${{ env.input_tag }}'
 
-    # upload file: test file
-    - name: 'test upload file' 
+    #setup python
+    - name: setup python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8 #install the python needed
+
+    #install dependencies
+    - name: Install dependencies
+      run: |
+        cd "$GITHUB_WORKSPACE/Deployment-Scripts/AzureDatabricks"
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+         
+    # Publish Artifact: Databricks-Notebooks
+    - name: 'Publish Artifact: Databricks-Notebooks' 
       uses: actions/upload-artifact@v2
       with:
+        name: 'notebooks'
         path: '${{ github.workspace }}/${{ github.event.inputs.GIT_NOTEBOOK_PATH }}'
     
-                   
+    
+    # Publish Artifact: Databricks-Deployment-Scripts
+    - name: 'Publish Artifact: Databricks-Deployment-Scripts' 
+      uses: actions/upload-artifact@v2
+      with:
+        name: 'deployment-scripts'
+        path: '${{ github.workspace }}/Deployment-Scripts/AzureDatabricks'                                
+
+
+#############################################################
+# Deploy to Dev
+#############################################################
+  Dev:
+    needs: Build
+    runs-on: ubuntu-latest
+    env:
+      resourceGroupName: '${{ github.event.inputs.RESOURCE_GROUP }}'
+      databricksWorkspaceName: '${{ github.event.inputs.WORKSPACE_NAME }}'
+      initialnotebook: '${{ github.event.inputs.INITIAL_DEPLOY }}'
+  
+    steps:      
+
+    # Download Artifact: Databricks-Notebooks
+    - name: 'Download Artifact: Databricks-Notebooks' 
+      uses: actions/download-artifact@v2
+      with:
+        name: 'notebooks'
+        path: ${{ github.workspace }}/${{ github.event.inputs.GIT_NOTEBOOK_PATH }}
+
+    # Download Artifact: Deployment Scripts
+    - name: 'Download Artifact: Deployment Scripts' 
+      uses: actions/download-artifact@v2
+      with:
+        name: 'deployment-scripts'
+        path: ${{ github.workspace }}/Deployment-Scripts/AzureDatabricks
+
+    - name: Newly Deploy Databrick Notebook
+      if: ${{ github.event.inputs.INITIAL_DEPLOY == 'true' }}
+      run:  |
+        echo "Initial Notebook Checked, begin new import"
+        chmod +x $GITHUB_WORKSPACE/Deployment-Scripts/AzureDatabricks/deploy-notebooks.py
+        python3 $GITHUB_WORKSPACE/Deployment-Scripts/AzureDatabricks/deploy-notebooks.py ${{ secrets.dev_tenant_id }} ${{ secrets.dev_client_id }} ${{ secrets.dev_client_secret }} ${{ secrets.dev_subscription_id }} ${{ env.resourceGroupName }} ${{ env.databricksWorkspaceName }} ${{ github.event.inputs.NOTEBOOK_DEPLOYMENT_PATH }} ${{ github.event.inputs.GIT_NOTEBOOK_PATH }}
+
+    - name: Update Existing Notebook with partial change from last tag
+      if: ${{ github.event.inputs.INITIAL_DEPLOY == 'false' }}
+      run:  |
+        echo "Begin partial diff change"
+
+        
+
