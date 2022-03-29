@@ -46,15 +46,12 @@ else:
     print(commitidfromtag)
 
     changed_files = []
+    print(latestcommit.diff(commitidfromtag))
 
-    for x in latestcommit.diff(commitidfromtag):
-        if x.a_blob.path not in changed_files:
-            changed_files.append(x.a_blob.path)
-            
-        if x.b_blob is not None and x.b_blob.path not in changed_files:
-            changed_files.append(x.b_blob.path)
+diffs = {
+    diff.a_path: diff for diff in latestcommit.diff(commitidfromtag)
+}
         
-    print (changed_files)
 
 
 
