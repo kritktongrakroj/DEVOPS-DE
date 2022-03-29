@@ -87,6 +87,9 @@ for i in range(len(changed_files)):
         else:
             to_replace.append(changed_type_list[i])
 
+print("File need to add ", to_add)
+print("File need to replace", to_replace)
+
 
 
 
