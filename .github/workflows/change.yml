@@ -14,11 +14,18 @@ on:
         required: true
         default: 'testcommit'
 
+      INITIAL_DEPLOY:
+        description: First time to deploy this notebook?
+        type: boolean
+        required: true
+        default: false
 
       INPUT_TAG:
-        description: 'Specify tag that want to deploy'
+        description: 'Tag name'
         required: true
         default: 'BSL005'
+
+      
 
 
 jobs:
@@ -57,6 +64,17 @@ jobs:
        chmod +x $GITHUB_WORKSPACE/Deployment-Scripts/rollback/deploy-rollback.py
        python3 $GITHUB_WORKSPACE/Deployment-Scripts/rollback/deploy-rollback.py ${{ env.input_tag }} ${{ env.repo_url }} ${{ env.temp_repo_path }} ${{ env.notebookpath }} ${{ env.branch_name }}
       
+    - name: Deploy script2
+      if: ${{ github.event.inputs.INITIAL_DEPLOY == 'true' }}
+      run:  |
+        echo "Hello this is true"
+
+    - name: Deploy script2
+      if: ${{ github.event.inputs.INITIAL_DEPLOY == 'false' }}
+      run:  |
+        echo "Hello this is false"
+      
+
 
     # Publish Artifact: Deployment-Scripts
     - name: 'Publish Artifact: Deployment-Scripts' 

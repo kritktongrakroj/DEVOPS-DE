@@ -53,17 +53,13 @@ print("this tag is :", str(tagslist[tag_position]), "and its previous tag is :",
 #set previos commit id
 previouscommit = str(tagslist[tag_position - 1])
 latestcommit = repo.commit(previouscommit)
-print("The Previous tag name :", str(tagslist[tag_position]), "Has Commit ID: ", latestcommit)
+print("The Previous tag name :", str(tagslist[tag_position - 1]), "Has Commit ID: ", latestcommit)
 print("The Specify tag name :", str(tagslist[tag_position]), "Has Commit ID: ", commitidfromtag)
 
 
 #print diff file
 #print(latestcommit.diff(commitidfromtag))
 
-diffs = {
-    diff.a_path: diff for diff in latestcommit.diff(commitidfromtag)
-}
-   
 changed_files = []
 changed_type_list = []
 
