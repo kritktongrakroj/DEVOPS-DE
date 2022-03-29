@@ -19,6 +19,7 @@ print(branchname)
 print(repo_path)
 print(repo_url)
 print(notebook_path)
+print(inputtag)
 
 #get repo
 repo = git.Repo.clone_from(repo_url, repo_path)
@@ -40,7 +41,8 @@ print(tagslist)
 # find the position of input tag list
 def find_tag_position(tag):
     for i in range(len(tagslist)):
-        if tagslist[i] == tag:
+        tagref = str(tagslist[i])
+        if tagref == tag:
             return i
 
 tag_position = find_tag_position(inputtag)
