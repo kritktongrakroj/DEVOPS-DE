@@ -57,7 +57,7 @@ else:
         if x.a_path not in changed_files:
             changed_files.append(x.a_path)
             
-        if x.b_path is not None and x.b_blob.path not in changed_files:
+        if x.b_path is not None and x.b_path not in changed_files:
             changed_files.append(x.b_path)
             
     print (changed_files)
