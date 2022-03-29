@@ -53,9 +53,8 @@ else:
     }
     print(diffs)
 
-    for objpath, stats in commitidfromtag.stats.files.items():
-        diff = diffs.get(objpath)
-        print(diff)
+    for i in range(len(diffs)):
+        print("this is diff", i, "This is path from diff a", diffs[i])
             
 
     
