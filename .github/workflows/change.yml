@@ -18,7 +18,7 @@ on:
       INPUT_TAG:
         description: 'Specify tag that want to deploy'
         required: true
-        default: 'BSL004'
+        default: 'BSL005'
 
 
 jobs:

@@ -75,12 +75,20 @@ for x in latestcommit.diff(commitidfromtag):
     if x.b_path is not None and x.b_path not in changed_files:
         changed_files.append(x.b_path)
         changed_type_list.append(x.change_type)
+
+to_add = []
+to_replace = []
             
 
 for i in range(len(changed_files)):
     if changed_files[i].startswith(notebook_path):
-        print(changed_files[i])
-        print(changed_type_list[i])
+        if changed_type_list[i] == 'A':
+            to_add.append(changed_type_list[i])
+        else:
+            to_replace.append(changed_type_list[i])
+
+
+
 
 
 
