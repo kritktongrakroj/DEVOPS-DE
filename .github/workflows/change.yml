@@ -21,7 +21,6 @@ on:
 
       INPUT_PREVIOUS_TAG:
         description: 'latest Tag deployed (leave blank if need to import entire notebook)'
-        required: true
         default: 'BSL003'
 
       INPUT_TAG:
