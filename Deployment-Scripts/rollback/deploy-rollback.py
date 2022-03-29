@@ -37,7 +37,9 @@ repo.git.checkout(branchname)
 commitidfromtag = repo.commit(inputtag)
 
 if not input_previous_tag:
-    print ("remove all the file and folder and deploy with specify tag id :", commitidfromtag )
+    tagslist = sorted(repo.tags, key=lambda t: t.commit.committed_datetime)
+    print("When empty this will trigger to deploy latest tag with compare commit id of previous one")
+    print("this is last tag :", tagslist[-1] , " and this is previous tag that will be deploy :", tagslist[-2])
 
 else:
     print("compare the latest commit and the specify commit to deploy ")
@@ -76,9 +78,7 @@ else:
             
 
 
-tagslist = sorted(repo.tags, key=lambda t: t.commit.committed_datetime)
-print(tagslist)
-print("this is last tag :", tagslist[-1] , " and this is previous tag :", tagslist[-2])
+
 
 
 """
