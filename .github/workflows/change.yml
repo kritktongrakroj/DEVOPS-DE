@@ -19,11 +19,15 @@ on:
         required: true
         default: 'https://github.com/kritktongrakroj/SCB.git'
 
-
-      INPUT_TAG:
-        description: 'Tag name or baseline name'
+      INPUT_PREVIOUS_TAG:
+        description: 'latest Tag deployed (leave blank if need to import entire notebook)'
         required: true
         default: 'BSL003'
+
+      INPUT_TAG:
+        description: 'Specify tag that want to deploy'
+        required: true
+        default: 'BSL004'
 
 
 
@@ -39,6 +43,7 @@ jobs:
        temp_repo_path: '${{ github.workspace }}/clonrepo'
        repo_url: '${{ github.event.inputs.GIT_URL }}'
        input_tag: '${{ github.event.inputs.INPUT_TAG }}'
+       input_previous_tag: '${{ github.event.inputs.INPUT_PREVIOUS_TAG }}'
        notebookpath: '${{ github.workspace }}/${{ github.event.inputs.GIT_NOTEBOOK_PATH }}'
        branch_name: '${{ github.ref_name }}'
       
@@ -61,7 +66,7 @@ jobs:
     - name: Deploy script1
       run: |
        chmod +x $GITHUB_WORKSPACE/Deployment-Scripts/rollback/deploy-rollback.py
-       python3 $GITHUB_WORKSPACE/Deployment-Scripts/rollback/deploy-rollback.py ${{ env.input_tag }} ${{ env.repo_url }} ${{ env.temp_repo_path }} ${{ env.notebookpath }} ${{ env.branch_name }}
+       python3 $GITHUB_WORKSPACE/Deployment-Scripts/rollback/deploy-rollback.py ${{ env.input_tag }} ${{ env.repo_url }} ${{ env.temp_repo_path }} ${{ env.notebookpath }} ${{ env.branch_name }} ${{ env.input_previous_tag }}
       
 
     # Publish Artifact: Deployment-Scripts

@@ -31,32 +31,9 @@ azure_databricks_resource_id="2ff814a6-3304-4ab8-85cb-cd0e6f879c1d"
 resourceId= '/subscriptions/'+subscription_id+'/resourceGroups/'+resourceGroup+'/providers/Microsoft.Databricks/workspaces/'+workspaceName
 #print("the valie is",resourceId,azure_databricks_resource_id)
 
+
+#checkout to tag id
 ###################################
-#get commit id from tags on earlier state
-inputtag = str(sys.argv[1])
-repo_url = str(sys.argv[2])
-repo_path = str(sys.argv[3])
-
-repo = git.Repo.clone_from(repo_url, repo_path)
-def find_tag():
-    #print("Our input tag name",inputtag)
-    taglist = repo.tags
-    #print(taglist) --> list tag
-
-    for i in range(len(taglist)):
-        #matching tag
-        #print(taglist[i])
-        tagref = str(taglist[i])
-        if inputtag == tagref:
-            #print("OK, tag match")
-            #print("Commit id related to tag ",taglist[i].commit)
-            return taglist[i].commit
-            break
-# send back commit id
-commitidfromtag = find_tag()
-
-# compare commit id with 
-
 
 ##################################
 
