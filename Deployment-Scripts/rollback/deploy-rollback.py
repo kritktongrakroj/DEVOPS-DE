@@ -80,7 +80,8 @@ tagslist = sorted(repo.tags, key=lambda t: t.commit.committed_datetime)
 print(tagslist)
 print("this is last tag :", tagslist[-1] , " and this is previous tag :", tagslist[-2])
 
-    """
+
+"""
     diffs = {
         diff.a_path: diff for diff in latestcommit.diff(commitidfromtag)
     }
@@ -104,8 +105,7 @@ print("this is last tag :", tagslist[-1] , " and this is previous tag :", tagsli
 
 
     lastcommit = repo.head.commit
-
-    """
+"""
 
 
 
