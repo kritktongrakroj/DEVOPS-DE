@@ -71,9 +71,8 @@ else:
     print(changed_type_list)
 
     for i in range(len(changed_files)):
-        eachpath = str(changed_files[i])
-        if eachpath.startwith(notebook_path):
-            print(eachpath)
+        if changed_files[i].startswith(notebook_path):
+            print(changed_files[i])
             
 
     
