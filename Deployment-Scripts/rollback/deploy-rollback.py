@@ -38,7 +38,7 @@ commitidfromtag = repo.commit(inputtag)
 tagslist = sorted(repo.tags, key=lambda t: t.commit.committed_datetime)
 print(tagslist)
 
-# find the position of input tag list
+# find the position of input tag list to find the previous tags
 def find_tag_position(tag):
     for i in range(len(tagslist)):
         tagref = str(tagslist[i])
@@ -50,11 +50,14 @@ print(tag_position)
 print("this tag is :", str(tagslist[tag_position]), "and its previous tag is :", str(tagslist[tag_position - 1]))
 
 
-print("compare the input commit and the specify commit to deploy ")
-latestcommit = repo.commit(inputtag)
+#set previos commit id
+previouscommit = str(tagslist[tag_position - 1])
+latestcommit = repo.commit(previouscommit)
 print(latestcommit)
 print(commitidfromtag)
 
+
+#print diff file
 print(latestcommit.diff(commitidfromtag))
 
 diffs = {
