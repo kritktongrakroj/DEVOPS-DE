@@ -52,7 +52,7 @@ diffs = {
     diff.a_path: diff for diff in latestcommit.diff(commitidfromtag)
 }
 
-for objpath, stats in latestcommit.stats.files.items():
+for objpath, stats in commitidfromtag.stats.files.items():
 
             # Select the diff for the path in the stats
             diff = diffs.get(objpath)
