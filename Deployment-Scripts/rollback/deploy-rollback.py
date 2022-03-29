@@ -14,7 +14,6 @@ repo_url = str(sys.argv[2])
 repo_path = str(sys.argv[3])
 notebook_path = str(sys.argv[4])
 branchname = str(sys.argv[5])
-input_previous_tag = str(sys.argv[6])
 
 print(branchname)
 print(repo_path)
@@ -35,47 +34,55 @@ repo.git.checkout(branchname)
 commitidfromtag = repo.commit(inputtag)
 
 
-if input_previous_tag is None:
-    tagslist = sorted(repo.tags, key=lambda t: t.commit.committed_datetime)
-    print("When empty this will trigger to deploy latest tag with compare commit id of previous one")
-    print("this is last tag :", tagslist[-1] , " and this is previous tag that will be deploy :", tagslist[-2])
+
+tagslist = sorted(repo.tags, key=lambda t: t.commit.committed_datetime)
+print(tagslist)
+
+# find the position of input tag list
+def find_tag_position(tag):
+    for i in range(len(tagslist)):
+        if tagslist[i] == tag:
+            return i
+
+tag_position = find_tag_position(inputtag)
+print(tag_position)
+
     
 
-else:
-    
-    print("compare the input commit and the specify commit to deploy ")
-    latestcommit = repo.commit(input_previous_tag)
-    print(latestcommit)
-    print(commitidfromtag)
 
-    print(latestcommit.diff(commitidfromtag))
+print("compare the input commit and the specify commit to deploy ")
+latestcommit = repo.commit()
+print(latestcommit)
+print(commitidfromtag)
 
-    diffs = {
-        diff.a_path: diff for diff in latestcommit.diff(commitidfromtag)
-    }
+print(latestcommit.diff(commitidfromtag))
+
+diffs = {
+    diff.a_path: diff for diff in latestcommit.diff(commitidfromtag)
+}
    
-    changed_files = []
-    changed_type_list = []
+changed_files = []
+changed_type_list = []
 
-    for x in latestcommit.diff(commitidfromtag):
-        if x.a_path not in changed_files:
-            changed_files.append(x.a_path)
-            changed_type_list.append(x.change_type)
-            print("file path for a :", x.a_path)
-            print("Change type for a :" ,x.change_type)
+for x in latestcommit.diff(commitidfromtag):
+    if x.a_path not in changed_files:
+        changed_files.append(x.a_path)
+        changed_type_list.append(x.change_type)
+        print("file path for a :", x.a_path)
+        print("Change type for a :" ,x.change_type)
             
-        if x.b_path is not None and x.b_path not in changed_files:
-            changed_files.append(x.b_path)
-            changed_type_list.append(x.change_type)
-            print("file path for b:", x.a_path)
-            print("Change type for b:" ,x.change_type)
+    if x.b_path is not None and x.b_path not in changed_files:
+        changed_files.append(x.b_path)
+        changed_type_list.append(x.change_type)
+        print("file path for b:", x.a_path)
+        print("Change type for b:" ,x.change_type)
             
-    print (changed_files)
-    print(changed_type_list)
+print (changed_files)
+print(changed_type_list)
 
-    for i in range(len(changed_files)):
-        if changed_files[i].startswith(notebook_path):
-            print(changed_files[i])      
+for i in range(len(changed_files)):
+    if changed_files[i].startswith(notebook_path):
+        print(changed_files[i])          
 
 
 
