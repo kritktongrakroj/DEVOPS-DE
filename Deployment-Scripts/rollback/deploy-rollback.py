@@ -19,7 +19,6 @@ print(branchname)
 print(repo_path)
 print(repo_url)
 print(notebook_path)
-print(input_previous_tag)
 
 #get repo
 repo = git.Repo.clone_from(repo_url, repo_path)
@@ -47,11 +46,11 @@ def find_tag_position(tag):
 tag_position = find_tag_position(inputtag)
 print(tag_position)
 
-    
+print(tagslist[tag_position], tagslist[tag_position-1])
 
 
 print("compare the input commit and the specify commit to deploy ")
-latestcommit = repo.commit()
+latestcommit = repo.commit(inputtag)
 print(latestcommit)
 print(commitidfromtag)
 
