@@ -48,9 +48,18 @@ else:
     changed_files = []
     print(latestcommit.diff(commitidfromtag))
 
+    diffs = {
+        diff.a_path: diff for diff in latestcommit.diff(commitidfromtag)
+    }
+    print(diffs)
+
+
+
+"""
 diffs = {
     diff.a_path: diff for diff in latestcommit.diff(commitidfromtag)
 }
+
 
 for objpath, stats in commitidfromtag.stats.files.items():
 
@@ -66,7 +75,7 @@ for objpath, stats in commitidfromtag.stats.files.items():
                         print("this is chnage on rename",diff)
                         break
         
-
+"""
 
 
 lastcommit = repo.head.commit
