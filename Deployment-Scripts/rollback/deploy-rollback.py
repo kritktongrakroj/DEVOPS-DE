@@ -51,6 +51,20 @@ else:
 diffs = {
     diff.a_path: diff for diff in latestcommit.diff(commitidfromtag)
 }
+
+for objpath, stats in latestcommit.stats.files.items():
+
+            # Select the diff for the path in the stats
+            diff = diffs.get(objpath)
+            print("this is change from commit last",diff)
+
+            # If the path is not in the dictionary, it's because it was
+            # renamed, so search through the b_paths for the current name.
+            if not diff:
+                for diff in diffs.values():
+                    if diff.b_path == repo_path and diff.renamed:
+                        print("this is chnage on rename",diff)
+                        break
         
 
 
