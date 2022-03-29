@@ -8,7 +8,6 @@ import base64
 
 ############################
 
-input_previous_tag = 'a'
 
 inputtag = str(sys.argv[1])
 repo_url = str(sys.argv[2])
@@ -36,7 +35,14 @@ repo.git.checkout(branchname)
 commitidfromtag = repo.commit(inputtag)
 
 
-if input_previous_tag != 'a':
+if input_previous_tag is None:
+    tagslist = sorted(repo.tags, key=lambda t: t.commit.committed_datetime)
+    print("When empty this will trigger to deploy latest tag with compare commit id of previous one")
+    print("this is last tag :", tagslist[-1] , " and this is previous tag that will be deploy :", tagslist[-2])
+    
+
+else:
+    
     print("compare the input commit and the specify commit to deploy ")
     latestcommit = repo.commit(input_previous_tag)
     print(latestcommit)
@@ -69,13 +75,7 @@ if input_previous_tag != 'a':
 
     for i in range(len(changed_files)):
         if changed_files[i].startswith(notebook_path):
-            print(changed_files[i])
-
-else:
-    tagslist = sorted(repo.tags, key=lambda t: t.commit.committed_datetime)
-    print("When empty this will trigger to deploy latest tag with compare commit id of previous one")
-    print("this is last tag :", tagslist[-1] , " and this is previous tag that will be deploy :", tagslist[-2])
-            
+            print(changed_files[i])      
 
 
 
