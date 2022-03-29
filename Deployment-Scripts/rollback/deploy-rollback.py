@@ -75,9 +75,10 @@ else:
             print(changed_files[i])
             
 
-    
 
-
+tagslist = sorted(repo.tags, key=lambda t: t.commit.committed_datetime)
+print(tagslist)
+print("this is last tag :", tagslist[-1] , " and this is previous tag :", tagslist[-2])
 
     """
     diffs = {

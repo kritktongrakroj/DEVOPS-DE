@@ -21,7 +21,7 @@ repo = git.Repo.clone_from(repo_url, repo_path)
 def find_tag():
     #print("Our input tag name",inputtag)
     taglist = repo.tags
-    print(taglist)
+    #print(taglist)
 
     for i in range(len(taglist)):
         #matching tag
