@@ -46,7 +46,6 @@ def find_tag_position(tag):
 tag_position = find_tag_position(inputtag)
 print(tag_position)
 
-print(tagslist[tag_position], tagslist[tag_position-1])
 
 
 print("compare the input commit and the specify commit to deploy ")
