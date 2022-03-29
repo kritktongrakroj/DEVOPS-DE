@@ -8,7 +8,6 @@ import base64
 
 ############################
 
-input_previous_tag = ''
 
 
 inputtag = str(sys.argv[1])
@@ -37,7 +36,7 @@ repo.git.checkout(branchname)
 commitidfromtag = repo.commit(inputtag)
 
 
-if input_previous_tag:
+if input_previous_tag is not None:
     print("compare the input commit and the specify commit to deploy ")
     latestcommit = repo.commit(input_previous_tag)
     print(latestcommit)
