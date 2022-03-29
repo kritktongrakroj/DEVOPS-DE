@@ -64,12 +64,12 @@ jobs:
        chmod +x $GITHUB_WORKSPACE/Deployment-Scripts/rollback/deploy-rollback.py
        python3 $GITHUB_WORKSPACE/Deployment-Scripts/rollback/deploy-rollback.py ${{ env.input_tag }} ${{ env.repo_url }} ${{ env.temp_repo_path }} ${{ env.notebookpath }} ${{ env.branch_name }}
       
-    - name: Deploy script2
+    - name: Deploy script 2
       if: ${{ github.event.inputs.INITIAL_DEPLOY == 'true' }}
       run:  |
         echo "Hello this is true"
 
-    - name: Deploy script2
+    - name: Deploy script 3
       if: ${{ github.event.inputs.INITIAL_DEPLOY == 'false' }}
       run:  |
         echo "Hello this is false"
