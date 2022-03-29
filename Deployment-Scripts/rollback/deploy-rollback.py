@@ -53,8 +53,8 @@ print("this tag is :", str(tagslist[tag_position]), "and its previous tag is :",
 #set previos commit id
 previouscommit = str(tagslist[tag_position - 1])
 latestcommit = repo.commit(previouscommit)
-print(latestcommit)
-print(commitidfromtag)
+print("The Previous tag name :", str(tagslist[tag_position]), "Has Commit ID: ", latestcommit)
+print("The Specify tag name :", str(tagslist[tag_position]), "Has Commit ID: ", commitidfromtag)
 
 
 #print diff file
@@ -76,6 +76,8 @@ for x in latestcommit.diff(commitidfromtag):
         changed_files.append(x.b_path)
         changed_type_list.append(x.change_type)
 
+print("file to change : " , changed_files)
+
 to_add = []
 to_replace = []
             
@@ -83,9 +85,9 @@ to_replace = []
 for i in range(len(changed_files)):
     if changed_files[i].startswith(notebook_path):
         if changed_type_list[i] == 'A':
-            to_add.append(changed_type_list[i])
+            to_add.append(changed_files[i])
         else:
-            to_replace.append(changed_type_list[i])
+            to_replace.append(changed_files[i])
 
 print("File need to add ", to_add)
 print("File need to replace", to_replace)
