@@ -44,7 +44,7 @@ jobs:
        repo_url: '${{ github.event.inputs.GIT_URL }}'
        input_tag: '${{ github.event.inputs.INPUT_TAG }}'
        input_previous_tag: '${{ github.event.inputs.INPUT_PREVIOUS_TAG }}'
-       notebookpath: '${{ github.workspace }}/${{ github.event.inputs.GIT_NOTEBOOK_PATH }}'
+       notebookpath: '${{ github.event.inputs.GIT_NOTEBOOK_PATH }}'
        branch_name: '${{ github.ref_name }}'
       
     # Checkout code
