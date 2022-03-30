@@ -112,6 +112,8 @@ jobs:
       resourceGroupName: '${{ github.event.inputs.RESOURCE_GROUP }}'
       databricksWorkspaceName: '${{ github.event.inputs.WORKSPACE_NAME }}'
       initialnotebook: '${{ github.event.inputs.INITIAL_DEPLOY }}'
+      branch_name: '${{ github.ref_name }}'
+      input_tag: '${{ github.event.inputs.INPUT_TAG }}'
   
     steps:      
 

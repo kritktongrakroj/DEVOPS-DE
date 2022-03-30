@@ -90,6 +90,8 @@ Workspcae_URL=response.json()['properties']['workspaceUrl']
 
 dbrks_create_dir_url =  "https://"+Workspcae_URL+".azuredatabricks.net/api/2.0/workspace/mkdirs"
 dbrks_import_rest_url = "https://"+Workspcae_URL+".azuredatabricks.net/api/2.0/workspace/import"
+
+dbrks_delete_dir_url = "https://"+Workspcae_URL+".azuredatabricks.net/api/2.0/workspace/delete"
 api_url="https://"+Workspcae_URL+".azuredatabricks.net/api/"
 
 #print(dbrks_import_rest_url)
@@ -119,6 +121,7 @@ def adb_notebook_api(endpoint,json_content):
         raise Exception("API Failed, Result: {}".format(response.json()))    
         response.raise_for_status()
     return True
+    
 def createfolder_to_databricks(notebook_path):
 
     # Create Directory in Databricks Workspace if has directory
