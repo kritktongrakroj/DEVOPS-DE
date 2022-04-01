@@ -255,14 +255,13 @@ def createfolder_to_databricks(notebook_path):
 
     # Create Directory in Databricks Workspace if has directory
     if os.path.dirname(notebook_path) != "/" and os.path.dirname(notebook_path):
-        dir_name = os.path.split(notebook_path)[0]
-        print(dir_name)
+        print(notebook_path)
         json_notebook_path = {
-            "path" : dir_name
+            "path" : notebook_path
         }
         status = create_adb_token_api("2.0/workspace/mkdirs",json_notebook_path)
         if not status:
-            raise Exception("Create directory {} failed".format(dir_name))
+            raise Exception("Create directory {} failed".format(notebook_path))
     
 
 # Function to remove file
@@ -320,6 +319,19 @@ if os.path.exists(DIRECTORY):
                 notebook_abs_path_dir = os.path.join(NOTEBOOK_DIRECTORY,notebook_name_dir)
                 dir_name = notebook_abs_path_dir.replace('\\','/')
                 response = createfolder_to_databricks(dir_name)
+
+
+#create new folder for change file if required
+if os.path.exists(DIRECTORY):
+    if os.path.exists(DIRECTORY):
+        for i in range(len(to_add)):
+            folder_to_create = to_add[i]
+            split_remove_path_folder_add = pathlib.Path(folder_to_create)
+            raw_path_folder_add = pathlib.Path(*split_remove_path_folder_add.parts[2:])
+            join_raw_path_add = os.path.join(NOTEBOOK_DIRECTORY, raw_path_folder_add)
+            final_dir_folder = os.path.dirname(join_raw_path_add)
+            print(final_dir_folder)
+            response = createfolder_to_databricks(final_dir_folder)
 
 #Remove All Files that changes
 print("Begin remove file")
