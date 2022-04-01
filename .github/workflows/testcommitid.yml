@@ -10,7 +10,7 @@ on:
       GIT_NOTEBOOK_PATH:
         description: 'Notebooks Relative Path in Git'
         required: true
-        default: 'notebooks/CARDX'
+        default: 'notebooks/BSL001'
 
       # This is where in your Databricks workspace your notebooks will be deployed
       # Typically this is under a Folder under the Workspace and not under a specific user's folder
@@ -46,12 +46,17 @@ on:
         description: First time to deploy this notebook?
         type: boolean
         required: true
-        default: false
+        default: 'false'
 
       INPUT_TAG:
         description: 'Tag name'
         required: true
-        default: 'BSL005'
+        default: 'BSL004'
+        
+      PAT:
+        description: 'PAT'
+        required: true
+        default: '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'
 
 jobs:
   #############################################################
@@ -63,8 +68,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
        input_tag: '${{ github.event.inputs.INPUT_TAG }}'
-       repo_url: 'https://github.com/kritktongrakroj/SCB.git'
-       repo_path: '${{ github.workspace }}/clonrepo'
 
     # Checkout code
     steps:
@@ -72,19 +75,6 @@ jobs:
       uses: actions/checkout@v2
       with:
         ref: '${{ env.input_tag }}'
-
-    #setup python
-    - name: setup python
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.8 #install the python needed
-
-    #install dependencies
-    - name: Install dependencies
-      run: |
-        cd "$GITHUB_WORKSPACE/Deployment-Scripts/AzureDatabricks"
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
          
     # Publish Artifact: Databricks-Notebooks
     - name: 'Publish Artifact: Databricks-Notebooks' 
@@ -112,10 +102,12 @@ jobs:
       resourceGroupName: '${{ github.event.inputs.RESOURCE_GROUP }}'
       databricksWorkspaceName: '${{ github.event.inputs.WORKSPACE_NAME }}'
       initialnotebook: '${{ github.event.inputs.INITIAL_DEPLOY }}'
-      branch_name: '${{ github.ref_name }}'
       input_tag: '${{ github.event.inputs.INPUT_TAG }}'
+      branch_name: '${{ github.ref_name }}'
+      repo_url: 'https://${{ github.event.inputs.PAT }}@github.com/sumitraj0103/dataengineering-devops.git'
+      repo_path: '${{ github.workspace }}/clonrepo'
   
-    steps:      
+    steps:
 
     # Download Artifact: Databricks-Notebooks
     - name: 'Download Artifact: Databricks-Notebooks' 
@@ -130,6 +122,19 @@ jobs:
       with:
         name: 'deployment-scripts'
         path: ${{ github.workspace }}/Deployment-Scripts/AzureDatabricks
+    
+    #setup python
+    - name: setup python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8 #install the python needed
+
+    #install dependencies
+    - name: Install dependencies
+      run: |
+        cd "$GITHUB_WORKSPACE/Deployment-Scripts/AzureDatabricks"
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
 
     - name: Newly Deploy Databrick Notebook
       if: ${{ github.event.inputs.INITIAL_DEPLOY == 'true' }}
@@ -142,6 +147,8 @@ jobs:
       if: ${{ github.event.inputs.INITIAL_DEPLOY == 'false' }}
       run:  |
         echo "Begin partial diff change"
+        chmod +x $GITHUB_WORKSPACE/Deployment-Scripts/AzureDatabricks/partial-deploy-notebooks.py
+        python3 $GITHUB_WORKSPACE/Deployment-Scripts/AzureDatabricks/partial-deploy-notebooks.py ${{ secrets.dev_tenant_id }} ${{ secrets.dev_client_id }} ${{ secrets.dev_client_secret }} ${{ secrets.dev_subscription_id }} ${{ env.resourceGroupName }} ${{ env.databricksWorkspaceName }} ${{ github.event.inputs.NOTEBOOK_DEPLOYMENT_PATH }} ${{ github.event.inputs.GIT_NOTEBOOK_PATH }} ${{ env.input_tag }} ${{ env.branch_name }} ${{ env.repo_url }} ${{ env.repo_path }}
 
         
 

@@ -1,3 +1,4 @@
+from asyncore import file_dispatcher
 import sys
 import os
 from os.path import isfile, join
@@ -6,6 +7,10 @@ import base64
 import glob
 import git
 import requests
+import pathlib
+
+
+print(sys.argv)
 
 tenant_id= str(sys.argv[1])
 client_id=str(sys.argv[2])
@@ -19,13 +24,15 @@ DATABRICKS_NOTEBOOKS_DIRECTORY = str(sys.argv[8])
 input_tag = str(sys.argv[9])
 branch_name = str(sys.argv[10])
 repo_url = str(sys.argv[11])
-repo_path = str(sys.argv[12])
+repo_path = (sys.argv[12])
 
 
 #########################################################
 #Begin Procedure Git
 
 # Get repo
+print(branch_name)
+
 repo = git.Repo.clone_from(repo_url, repo_path)
 print(repo)
 
@@ -59,35 +66,103 @@ print("the previous tag is :", str(tagslist[tag_position - 1]), "Its commit ID i
 changed_files = []
 changed_type_list = []
 
+
+from_a = []
+from_b = []
+changed_type_list_a = []
+changed_type_list_b = []
+
+
+
 for x in previouscommit.diff(commitidfromtag):
     if x.a_path not in changed_files:
         changed_files.append(x.a_path)
         changed_type_list.append(x.change_type)
+        changed_type_list_a.append(x.change_type)
+        from_a.append(x.a_path)
             
     if x.b_path is not None and x.b_path not in changed_files:
         changed_files.append(x.b_path)
         changed_type_list.append(x.change_type)
+        changed_type_list_b.append(x.change_type)
+        from_b.append(x.b_path)
+
+
 
 print("file to change : " , changed_files)
+print("file change type: ", changed_type_list)
 
-to_add = []
-to_remove = []
+remove_old_name= []
+
+to_change_from_b=[]
+
+# Finding file to remove from B at note book path
+for i in range(len(from_b)):
+    if from_b[i].startswith(DATABRICKS_NOTEBOOKS_DIRECTORY):
+        to_change_from_b.append(from_b[i])
+
+
+to_change_from_a=[]
+
+# Finding file to remove from B at note book path
+for i in range(len(from_a)):
+    if from_a[i].startswith(DATABRICKS_NOTEBOOKS_DIRECTORY):
+        to_change_from_a.append(from_a[i])
+
+        if changed_type_list_a[i] == 'R':
+            remove_old_name.append(from_a[i])
+
+        
+        
+
+print("Change on commit a : " , to_change_from_a)
+
+# from_b mean file that rename between commit
+print("Change on commit b : " , to_change_from_b)
+
+
+remove_file_a = []
 to_replace = []
 
-            
+# list modified and new file in previous commit
+new_file= []
+modified_file=[]
 
+
+
+
+
+            
+# Finding file to remove and add in the notebook
 for i in range(len(changed_files)):
     if changed_files[i].startswith(DATABRICKS_NOTEBOOKS_DIRECTORY):
 
         to_replace.append(changed_files[i])
-        if changed_type_list[i] == 'A':
-            to_add.append(changed_files[i])
-        else:
-            to_replace.append(changed_files[i])
 
-print("File need to add in this tag ", to_add)
+        if changed_type_list[i] == 'M' :
+            remove_file_a.append(changed_files[i])
+            modified_file.append(changed_files[i])
+        elif changed_type_list[i] == 'D' :
+            remove_file_a.append(changed_files[i])
+        elif changed_type_list[i] == 'A' :
+            new_file.append(changed_files[i])
+
+# remove_file_from will remove all changed file M, R and D
+        
+to_remove = remove_file_a + remove_old_name
+
+# Clear which file is to add in this case we use list of all change file in notebook path - old name file that replace with new name - list of deleted file
+# In summary we can import all modify file and new file
+
+#clear_file = set(to_replace) - set(to_remove_from_b) - set(deleted_file)
+
+
+to_add = to_change_from_b + new_file + modified_file
+
+print("this is all raw replace list : ",to_replace)
+
 print("File need to remove", to_remove) 
-print("Summary file to added after remove", to_replace)
+print("Summary file to added after remove", to_add)
 
 
 
@@ -164,7 +239,8 @@ def create_adb_token_api(endpoint,json_content):
     if response.status_code != 200:    
         raise Exception("API Failed, Result: {}".format(response.json()))    
         response.raise_for_status()
-    return response.json()['token_value']
+    return True
+
 
 Workspcae_Token = create_adb_token_api("2.0/token/create",ADB_TOKEN_REQ_BODY)
 print(Workspcae_Token)
@@ -179,7 +255,6 @@ def createfolder_to_databricks(notebook_path):
 
     # Create Directory in Databricks Workspace if has directory
     if os.path.dirname(notebook_path) != "/" and os.path.dirname(notebook_path):
-        print(os.path.dirname(notebook_path))
         dir_name = os.path.split(notebook_path)[0]
         print(dir_name)
         json_notebook_path = {
@@ -188,7 +263,20 @@ def createfolder_to_databricks(notebook_path):
         status = create_adb_token_api("2.0/workspace/mkdirs",json_notebook_path)
         if not status:
             raise Exception("Create directory {} failed".format(dir_name))
+    
 
+# Function to remove file
+def delete_existing_notebook_directory(notebook_path):
+    json_content = {
+        "path": notebook_path,
+        "recursive": True
+    }
+    status = create_adb_token_api("2.0/workspace/delete",json_content)
+    if not status:
+        raise Exception("Cannot delete {} .".format(notebook_path))
+
+
+#Function import notebook
 def import_to_databricks(notebook_path,full_path_file):
     file_content = open(full_path_file, "r").read()
     content_bytes = file_content.encode('ascii')
@@ -224,49 +312,40 @@ DIRECTORY = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path
 TYPE_OF_FILE = "."
 print(DIRECTORY)
 
-
-
-
-
-# Recursive create folder relate to change directory
+#Create Structure Folder
 if os.path.exists(DIRECTORY):
-
-        for i in range():
-
-
         for path, subdirs, files in os.walk(DIRECTORY):
                 notebook_full_path_dir = path.split(DATABRICKS_NOTEBOOKS_DIRECTORY)[-1]
-                print(notebook_full_path_dir)
                 notebook_name_dir = notebook_full_path_dir[1:]
-                print(notebook_name_dir)
                 notebook_abs_path_dir = os.path.join(NOTEBOOK_DIRECTORY,notebook_name_dir)
-                print(notebook_abs_path_dir)
                 dir_name = notebook_abs_path_dir.replace('\\','/')
-                print(dir_name)
-              
+                response = createfolder_to_databricks(dir_name)
 
-#create Files
+#Remove All Files that changes
+print("Begin remove file")
 if os.path.exists(DIRECTORY):
-        for path, subdirs, files in os.walk(DIRECTORY):
-            for file in files:
-                notebook_full_path = os.path.join(path.split(DATABRICKS_NOTEBOOKS_DIRECTORY)[-1], file)
-                print(notebook_full_path)
-                print(notebook_full_path.split(TYPE_OF_FILE)[0])
-                notebook_name = notebook_full_path.split(TYPE_OF_FILE)[0]
-                #if notebook_name[0] == "":
-                notebook_name = notebook_name[1:]
-                print(notebook_name)
-                # Get Absolute path to import in Databricks Notebook
-                notebook_abs_path = os.path.join(NOTEBOOK_DIRECTORY,notebook_name).replace('\\','/')
-                #print("printing notebook 0",notebook_name[0],notebook_name[1:])
-                print("printint nbote booke abs path",notebook_abs_path)
-                # Get Absolute path of python file
-                abs_path_file = os.path.join(path,file)
-                
-                print("sending the notebookPath and abs Path",notebook_abs_path,abs_path_file)
-                #response = import_to_databricks(notebook_abs_path,abs_path_file) 
+        for i in range(len(to_remove)):
+            file_to_remove = to_remove[i]
+            split_remove_path = pathlib.Path(file_to_remove)
+            raw_path = pathlib.Path(*split_remove_path.parts[2:])
+            join_raw_path = os.path.join(NOTEBOOK_DIRECTORY, raw_path)
+            final_dir = join_raw_path.split(TYPE_OF_FILE)[0]
+            print(final_dir)
+            response = delete_existing_notebook_directory(final_dir)
 
-                #print("the absolute Path",abs_path_file)
-                #print("the absolute Path on Server",notebook_abs_path)
+
+# Add Modify and new file
+print("Begin add file")
+if os.path.exists(DIRECTORY):
+        for i in range(len(to_add)):
+            file_to_add = to_add[i]
+            split_remove_path_add = pathlib.Path(file_to_add)
+            raw_path_add = pathlib.Path(*split_remove_path_add.parts[2:])
+            join_raw_path_add = os.path.join(NOTEBOOK_DIRECTORY, raw_path_add)
+            final_dir_add = join_raw_path_add.split(TYPE_OF_FILE)[0]
+            print(final_dir_add)
+            response = import_to_databricks(final_dir_add,file_to_add)
+
+
 else:
     raise Exception("Cannot find directory: {}".format(DIRECTORY))
