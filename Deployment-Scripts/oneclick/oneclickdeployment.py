@@ -79,7 +79,7 @@ for i in range(10, m_row + 1):
     trigger_cell_obj= sheet_obj.cell(row = i, column = 6)
     print(pipeline_cell_obj.value)
     print(trigger_cell_obj.value)
-    if (str(pipeline_cell_obj.value) != " ") and (str(trigger_cell_obj.value) == "Y"):
+    if (str(pipeline_cell_obj.value) != "None") and (str(trigger_cell_obj.value) == "Y"):
       workflows_run.append(cell_obj.value)
 
 
