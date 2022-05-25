@@ -42,7 +42,6 @@ jobs:
     runs-on: ubuntu-latest
     env: 
       pat_token: ${{ secrets.PAT_TOKEN_1 }}
-      repo_name: 'SCB'
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -81,7 +80,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v2
         with:
-          repository: 'kritktongrakroj/${{ env.repo_name }}'
+          repository: 'kritktongrakroj/datax-excel-dp'
           token: ${{ env.pat_token }}
         
         # Download Artifact: Deployment Scripts
