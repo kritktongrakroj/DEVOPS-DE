@@ -35,6 +35,11 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  #############################################################
+  # Builds the code
+  # Currently this is not building and JAR files, but you would do that here
+  # This is packaging up the files from Git to the Artifacts files
+  #############################################################
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
@@ -46,12 +51,9 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
 
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-        with:
-          repository: 'kritktongrakroj/${{ env.repo_name }}'
-          token: ${{ env.pat_token }}
-      
+      ############# Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it ############################
+      - name: Checkout repo
+        uses: actions/checkout@v2
 
       - name: setup python
         uses: actions/setup-python@v2
@@ -63,8 +65,26 @@ jobs:
            cd "$GITHUB_WORKSPACE/Deployment-Scripts/oneclick"
            python -m pip install --upgrade pip
            pip install -r requirements.txt
-           
-          
+ 
+ #############################################################
+# Deploy to PRD
+#############################################################
+  PRD:
+    runs-on: ubuntu-latest
+    env: 
+      pat_token: ${{ secrets.PAT_TOKEN_1 }}
+      repo_name: 'datax-excel-dp'
+      
+    steps:
+        
+        ############### Checkout Excel deployment repo ###############################
+      - name: Checkout repo
+        uses: actions/checkout@v2
+        with:
+          repository: 'kritktongrakroj/${{ env.repo_name }}'
+          token: ${{ env.pat_token }}
+        
+        
       - name: Run the One-click 
         run: |
          cd "$GITHUB_WORKSPACE/Deployment-Scripts/oneclick"
