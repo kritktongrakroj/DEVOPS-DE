@@ -72,12 +72,14 @@ for i in range(1, m_row + 1):
       print("The baseline Revision is",baseline_revision)
 
 # Get the List of Workflows
-# 8 is Column Number
+# 10 is Column Number
 workflows_run=[]
 for i in range(10, m_row + 1):
-    cell_obj = sheet_obj.cell(row = i, column = 3)
-    #print(cell_obj.value)
-    if str(cell_obj.value) != "None":
+    pipeline_cell_obj = sheet_obj.cell(row = i, column = 3)
+    trigger_cell_obj= sheet_obj.cell(row = i, column = 6)
+    print(pipeline_cell_obj.value)
+    print(trigger_cell_obj.value)
+    if (pipeline_cell_obj.value) != "None") and (str(trigger_cell_obj.value) == "Y"):
       workflows_run.append(cell_obj.value)
 
 
