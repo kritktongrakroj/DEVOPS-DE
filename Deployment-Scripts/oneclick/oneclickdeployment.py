@@ -68,7 +68,7 @@ for i in range(1, m_row + 1):
 # Get the List of Workflows
 # 8 is Column Number
 workflows_run=[]
-for i in range(8, m_row + 1):
+for i in range(10, m_row + 1):
     cell_obj = sheet_obj.cell(row = i, column = 3)
     #print(cell_obj.value)
     if str(cell_obj.value) != "None":
