@@ -49,7 +49,11 @@ def trigger_workflow(workflow_name,baseline_number,baseline_revision):
 #excel_path = "C:\Projects\SCBCICD\deployment-scripts\DATAX_AUTOX_BSL_0001_Deployment_Steps_v.00.00.00.xlsx"
 # workbook object is created
 wb_obj = openpyxl.load_workbook(excel_path)
- 
+
+for ws in wb_obj.worksheets:
+    print(ws.title)
+
+print(wb_obj.worksheets[1])
 sheet_obj = wb_obj.active
 m_row = sheet_obj.max_row
  
