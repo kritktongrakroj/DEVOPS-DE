@@ -41,12 +41,17 @@ jobs:
     runs-on: ubuntu-latest
     env: 
       pat_token: ${{ secrets.PAT_TOKEN_1 }}
+      repo_name: 'datax-excel-dp'
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
+        with:
+          repository: 'kritktongrakroj/${{ env.repo_name }}'
+          token: ${{ env.pat_token }}
+      
 
       - name: setup python
         uses: actions/setup-python@v2
@@ -63,5 +68,5 @@ jobs:
       - name: Run the One-click 
         run: |
          cd "$GITHUB_WORKSPACE/Deployment-Scripts/oneclick"
-         python3 $GITHUB_WORKSPACE/Deployment-Scripts/oneclick/oneclickdeployment.py ${{ github.workspace }}/${{ github.event.inputs.Excel_Path}} ${{ env.pat_token }}  ${{ github.event.inputs.owner_github}}  ${{ github.event.inputs.repo_github}}
+         python3 $GITHUB_WORKSPACE/Deployment-Scripts/oneclick/oneclickdeployment.py ${{ github.workspace }}/${{ github.event.inputs.Excel_Path}} ${{ env.pat_token }}  ${{ github.event.inputs.owner_github}}  ${{ env.repo_name }}
     
