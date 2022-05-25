@@ -11,6 +11,11 @@ on:
         description: 'Execel Relative Path'
         required: true
         default: '/deployment-excel/DATAX_AUTOX_BSL_0001_Deployment_Steps_v.00.00.00.xlsx'
+        
+      Date:
+        description: 'Date in format 25052022 to specify folder'
+        required: true
+        default: '24052022'
 
       # This is the path of your notebooks in Git.  Currently, this is not recursively deploying notebooks
       Env:
@@ -21,12 +26,12 @@ on:
       owner_github:
         description: 'GitHub Account Owner'
         required: true
-        default: 'sumitraj0103'
+        default: 'kritktongrakroj'
       
       repo_github:
-        description: 'GitHub Repository Name'
+        description: 'GitHub Excel Repository Name'
         required: true
-        default: 'dataengineering-devops'
+        default: 'datax-excel-dp'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -35,13 +40,13 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     env: 
-      pat_token: ${{ secrets.PAT_TOKEN_GITHUB }}
+      pat_token: ${{ secrets.PAT_TOKEN }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v2
 
       - name: setup python
         uses: actions/setup-python@v2
@@ -53,7 +58,6 @@ jobs:
            cd "$GITHUB_WORKSPACE/Deployment-Scripts/oneclick"
            python -m pip install --upgrade pip
            pip install -r requirements.txt
-           pip install --upgrade openpyxl
            
           
       - name: Run the One-click 
