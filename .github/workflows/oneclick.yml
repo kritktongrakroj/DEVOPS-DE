@@ -31,7 +31,7 @@ on:
       repo_github:
         description: 'GitHub Excel Repository Name'
         required: true
-        default: 'datax-excel-dp'
+        default: 'SCB'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
