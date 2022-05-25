@@ -97,3 +97,8 @@ jobs:
          cd "$GITHUB_WORKSPACE/Deployment-Scripts/oneclick"
          python3 $GITHUB_WORKSPACE/Deployment-Scripts/oneclick/oneclickdeployment.py ${{ github.workspace }}/${{ github.event.inputs.Date}}/${{ github.event.inputs.Excel_Path}} ${{ env.pat_token }}  ${{ env.repo_owner }}  ${{ env.repo_name }}
     
+      - name: Run the One-click 
+        run: |
+         cd "$GITHUB_WORKSPACE/Deployment-Scripts/oneclick"
+         python3 $GITHUB_WORKSPACE/Deployment-Scripts/oneclick/excel-deploy-adb.py ${{ github.workspace }}/${{ github.event.inputs.Date}}/${{ github.event.inputs.Excel_Path}} ${{ env.pat_token }}  ${{ env.repo_owner }}  ${{ env.repo_name }}
+    
