@@ -10,7 +10,7 @@ on:
       Excel_Path:
         description: 'Execel Relative Path'
         required: true
-        default: '/deployment-excel/DATAX_AUTOX_BSL_0001_Deployment_Steps_v.00.00.00.xlsx'
+        default: '24052022/DataX_CardX_BSL_0005_Deployment_Steps_v00.00.04.xlsx'
         
       Date:
         description: 'Date in format 25052022 to specify folder'
