@@ -19,15 +19,10 @@ on:
 
       # This is the path of your notebooks in Git.  Currently, this is not recursively deploying notebooks
       Env:
-        description: 'Monoline Environment'
+        description: 'Monoline Environment (npr,prp,prd)'
         required: true
         default: 'npr'
         
-      owner_github:
-        description: 'GitHub Account Owner'
-        required: true
-        default: 'kritktongrakroj'
-      
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -73,6 +68,7 @@ jobs:
     env: 
       pat_token: ${{ secrets.PAT_TOKEN_1 }}
       repo_name: 'SCB'
+      repo_owner: 'kritktongrakroj'
       
     steps:
         
@@ -99,5 +95,5 @@ jobs:
       - name: Run the One-click 
         run: |
          cd "$GITHUB_WORKSPACE/Deployment-Scripts/oneclick"
-         python3 $GITHUB_WORKSPACE/Deployment-Scripts/oneclick/oneclickdeployment.py ${{ github.workspace }}/${{ github.event.inputs.Excel_Path}} ${{ env.pat_token }}  ${{ github.event.inputs.owner_github}}  ${{ env.repo_name }}
+         python3 $GITHUB_WORKSPACE/Deployment-Scripts/oneclick/oneclickdeployment.py ${{ github.workspace }}/${{ github.event.inputs.Excel_Path}} ${{ env.pat_token }}  ${{ env.repo_owner }}  ${{ env.repo_name }}
     
