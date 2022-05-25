@@ -35,6 +35,8 @@ def trigger_workflow(workflow_name,baseline_number,baseline_revision):
           'revision_number': baseline_revision
         }
       }
+      
+      print("Token :", TOKEN, "Owner :", OWNER, "Repo :", REPO)
 
       requests.post(
         f"https://api.github.com/repos/{OWNER}/{REPO}/dispatches",
