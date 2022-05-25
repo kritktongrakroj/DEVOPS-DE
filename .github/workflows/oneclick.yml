@@ -10,7 +10,7 @@ on:
       Excel_Path:
         description: 'Execel Relative Path'
         required: true
-        default: '24052022/DataX_CardX_BSL_0005_Deployment_Steps_v00.00.04.xlsx'
+        default: 'DataX_CardX_BSL_0005_Deployment_Steps_v00.00.04.xlsx'
         
       Date:
         description: 'Date in format 25052022 to specify folder'
@@ -95,5 +95,5 @@ jobs:
       - name: Run the One-click 
         run: |
          cd "$GITHUB_WORKSPACE/Deployment-Scripts/oneclick"
-         python3 $GITHUB_WORKSPACE/Deployment-Scripts/oneclick/oneclickdeployment.py ${{ github.workspace }}/${{ github.event.inputs.Excel_Path}} ${{ env.pat_token }}  ${{ env.repo_owner }}  ${{ env.repo_name }}
+         python3 $GITHUB_WORKSPACE/Deployment-Scripts/oneclick/oneclickdeployment.py ${{ github.workspace }}/${{ github.event.inputs.Date}}/${{ github.event.inputs.Excel_Path}} ${{ env.pat_token }}  ${{ env.repo_owner }}  ${{ env.repo_name }}
     
