@@ -80,7 +80,7 @@ for i in range(10, m_row + 1):
     print(pipeline_cell_obj.value)
     print(trigger_cell_obj.value)
     if (str(pipeline_cell_obj.value) != "None") and (str(trigger_cell_obj.value) == "Y"):
-      workflows_run.append(cell_obj.value)
+      workflows_run.append(pipeline_cell_obj.value)
 
 
 for wf_name in workflows_run:
