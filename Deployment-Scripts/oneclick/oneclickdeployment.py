@@ -54,7 +54,7 @@ for ws in wb_obj.worksheets:
     print(ws.title)
 
 print(wb_obj.worksheets[1])
-sheet_obj = wb_obj.active
+sheet_obj = wb_obj.worksheets[1]
 m_row = sheet_obj.max_row
  
 #Get Detail of Baseline and Revision ID
