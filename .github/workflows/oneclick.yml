@@ -41,7 +41,7 @@ jobs:
   # This is packaging up the files from Git to the Artifacts files
   #############################################################
   # This workflow contains a single job called "build"
-  build:
+  Build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     env: 
@@ -79,6 +79,7 @@ jobs:
 # Deploy to PRD
 #############################################################
   PRD:
+    needs: Build
     runs-on: ubuntu-latest
     env: 
       pat_token: ${{ secrets.PAT_TOKEN_1 }}
