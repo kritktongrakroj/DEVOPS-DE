@@ -1,0 +1,63 @@
+# This is a basic workflow to help you get started with Actions
+
+name: oneclick
+
+# Controls when the workflow will run
+on:
+  workflow_dispatch:
+    inputs:
+      # This is the path of your notebooks in Git.  Currently, this is not recursively deploying notebooks
+      Excel_Path:
+        description: 'Execel Relative Path'
+        required: true
+        default: '/deployment-excel/DATAX_AUTOX_BSL_0001_Deployment_Steps_v.00.00.00.xlsx'
+
+      # This is the path of your notebooks in Git.  Currently, this is not recursively deploying notebooks
+      Env:
+        description: 'Monoline Environment'
+        required: true
+        default: 'npr'
+        
+      owner_github:
+        description: 'GitHub Account Owner'
+        required: true
+        default: 'sumitraj0103'
+      
+      repo_github:
+        description: 'GitHub Repository Name'
+        required: true
+        default: 'dataengineering-devops'
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    env: 
+      pat_token: ${{ secrets.PAT_TOKEN_GITHUB }}
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+
+      - name: setup python
+        uses: actions/setup-python@v2
+        with:
+         python-version: 3.8 #install the python needed
+         
+      - name: Install dependencies
+        run: |
+           cd "$GITHUB_WORKSPACE/Deployment-Scripts/oneclick"
+           python -m pip install --upgrade pip
+           pip install -r requirements.txt
+           pip install --upgrade openpyxl
+           
+          
+      - name: Run the One-click 
+        run: |
+         cd "$GITHUB_WORKSPACE/Deployment-Scripts/oneclick"
+         python3 $GITHUB_WORKSPACE/Deployment-Scripts/oneclick/oneclickdeployment.py ${{ github.workspace }}/${{ github.event.inputs.Excel_Path}} ${{ env.pat_token }}  ${{ github.event.inputs.owner_github}}  ${{ github.event.inputs.repo_github}}
+    
