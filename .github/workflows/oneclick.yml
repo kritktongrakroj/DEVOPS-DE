@@ -65,6 +65,15 @@ jobs:
            cd "$GITHUB_WORKSPACE/Deployment-Scripts/oneclick"
            python -m pip install --upgrade pip
            pip install -r requirements.txt
+           
+               # Publish Artifact: Deployment-Scripts
+      - name: 'Publish Artifact: Deployment-Scripts'
+        uses: actions/upload-artifact@v2
+        with:
+          name: 'deployment-scripts'
+          path: '${{ github.workspace }}/Deployment-Scripts/oneclick'                      
+
+      
  
  #############################################################
 # Deploy to PRD
@@ -84,6 +93,12 @@ jobs:
           repository: 'kritktongrakroj/${{ env.repo_name }}'
           token: ${{ env.pat_token }}
         
+        # Download Artifact: Deployment Scripts
+      - name: 'Download Artifact: Deployment Scripts'  
+        uses: actions/download-artifact@v2
+        with:
+          name: 'deployment-scripts'
+          path: ${{ github.workspace }}/Deployment-Scripts/oneclick
         
       - name: Run the One-click 
         run: |
