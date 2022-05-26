@@ -57,19 +57,19 @@ print(wb_obj.worksheets[3])
 sheet_obj = wb_obj.worksheets[3]
 m_row = sheet_obj.max_row
  
-#Get Detail of Baseline and Revision ID
-workflows_run=[]
-global baseline_number
-global baseline_revision
-for i in range(1, m_row + 1):
-    cell_obj = sheet_obj.cell(row = i, column = 3)
-    #print(cell_obj.value)
-    if str(cell_obj.value) == "BASELINE":
-      baseline_number=(sheet_obj.cell(row = i,column= 4)).value
-      print("The baseline Number is",baseline_number)
-    elif str(cell_obj.value) == "REVISION":
-      baseline_revision=(sheet_obj.cell(row = i,column= 4)).value
-      print("The baseline Revision is",baseline_revision)
+# #Get Detail of Baseline and Revision ID
+# workflows_run=[]
+# global baseline_number
+# global baseline_revision
+# for i in range(1, m_row + 1):
+#     cell_obj = sheet_obj.cell(row = i, column = 3)
+#     #print(cell_obj.value)
+#     if str(cell_obj.value) == "BASELINE":
+#       baseline_number=(sheet_obj.cell(row = i,column= 4)).value
+#       print("The baseline Number is",baseline_number)
+#     elif str(cell_obj.value) == "REVISION":
+#       baseline_revision=(sheet_obj.cell(row = i,column= 4)).value
+#       print("The baseline Revision is",baseline_revision)
 
 # Get the List of Workflows
 # 7 is Column Number
