@@ -90,7 +90,7 @@ for i in range(7, m_row + 1):
       else:
         import_notebook.append(file_cell_obj.value)
         
-    elif (str(file_cell_obj.value) != "None") and (str(type_cell_obj.value) == "DBFS"):
+    elif (str(file_cell_obj.value) != "None") and (str(type_cell_obj.value) == "dbfs"):
       if str(stat_cell_obj.value) == "remove":
         remove_dbfs.append(file_cell_obj.value)
       else:
