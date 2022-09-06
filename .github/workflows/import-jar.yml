@@ -30,4 +30,4 @@ jobs:
       uses: gincher/azure-keyvault@v1
       with:
         keyVaultName: ${{ env.keyvaultname }}
-        secretsFilterString: 'client-id, client-secret, subscriptionId, tenantId'
+        secretsFilterString: 'client-id,client-secret,subscriptionId,tenantId'
