@@ -1,0 +1,396 @@
+name: DEVOPS-NPR-ADB
+
+on:
+  workflow_dispatch:
+    inputs:
+      # This is the path of your notebooks in Git.  Currently, this is not recursively deploying notebooks
+      GIT_DBFS_PATH:
+        description: 'Notebooks Relative Path in Git'
+        required: true
+        default: 'testcommit'
+      
+      GIT_URL:
+        description: 'Repo URL'
+        required: true
+        default: 'https://github.com/kritktongrakroj/SCB.git'
+        
+
+
+jobs:
+  #############################################################
+  # Builds the code
+  # Currently this is not building and JAR files, but you would do that here
+  # This is packaging up the files from Git to the Artifacts files
+  #############################################################
+  Build:
+    runs-on: ubuntu-latest
+    env:
+       GITNB: 'ADB/CARDX'
+       databricksWorkspaceName: 'dxcardxseaadb001dev'
+       baselineTag: ${{ github.event.client_payload.baselinetag }}
+       revision_number: ${{ github.event.client_payload.revision_number }}
+       import_nb: ${{ github.event.client_payload.import_nb }}
+       remove_nb: ${{ github.event.client_payload.remove_nb }}
+       import_dbfs: ${{ github.event.client_payload.import_dbfs }}
+       remove_dbfs: ${{ github.event.client_payload.remove_dbfs }}
+       execute_batch: ${{ github.event.client_payload.execute_batch_list }}
+       execute_streaming: ${{ github.event.client_payload.execute_streaming_list }}
+       wf_name: ${{ github.event.client_payload.wf_name_list }}
+       
+    outputs:
+      addlist: ${{ steps.get-filelist.outputs.changelist }} 
+
+    # Checkout code
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      with:
+        ref: '${{ env.revision_number }}'
+
+    # Runs a set of commands using the runners shell
+    - name: Run a multi-line script
+      run: |
+        echo Add other actions to build,
+        echo test, and deploy your project.
+        echo $baselineTag
+        echo $revision_number
+        echo $import_nb
+        echo $remove_nb
+        echo $import_dbfs
+        echo $remove_dbfs
+        echo $execute_batch
+        echo $execute_streaming
+        echo $wf_name
+        
+    #install dependencies
+    - name: Install dependencies
+      run: |
+        cd "$GITHUB_WORKSPACE/Deployment-Scripts/AzureDatabricks"
+        python3 -m pip install --upgrade pip
+        pip install -r requirements.txt
+        
+############################ Searching and List Only Changed File Compare With Last Tag ########################################
+
+    
+    - name: Copy Change Notebook File to Baseline Folder
+      run:  |
+        cd "$GITHUB_WORKSPACE"
+        mkdir $baselineTag
+        ls -l
+        if [[ "${{ env.import_nb }}" = *","* ]]; then
+          echo ${{ env.import_nb }}
+          IFS=',' read -ra ADDR <<< "${{ env.import_nb }}"
+          for i in "${ADDR[@]}"; do
+            echo "$i"
+            cp --parents ./$i ./$baselineTag
+          done
+        elif [[ "${{ env.import_nb }}" != "" ]]; then
+          echo "Start to copy one file"
+          cp --parents ./${{ env.import_nb }} ./$baselineTag
+        else
+          echo "Empty list"
+        fi
+        
+  ############################ Searching and List Only Changed File Compare With Last Tag ########################################
+
+    
+    - name: Copy Change DBFS File to Baseline Folder
+      run:  |
+        cd "$GITHUB_WORKSPACE"
+        ls -l
+        if [[ "${{ env.import_dbfs }}" = *","* ]]; then
+          echo ${{ env.import_dbfs }}
+          IFS=',' read -ra ADDR <<< "${{ env.import_dbfs }}"
+          for i in "${ADDR[@]}"; do
+            echo "$i"
+            cp --parents ./$i ./$baselineTag
+          done
+        elif [[ "${{ env.import_dbfs }}" != "" ]]; then
+          echo "Start to copy one file"
+          cp --parents ./${{ env.import_dbfs }} ./$baselineTag
+        else
+          echo "Empty list"
+        fi
+        
+############################ Upload Notebook and Deployment Scripts Artifacts ########################################
+
+         
+    # Publish Artifact: Partial File
+    - name: 'Publish Artifact: Partial File'
+      if: ${{ env.import_nb != ''}}
+      env:
+        NODE_EXTRA_CA_CERTS: /etc/ssl/certs/ca-certificates.crt 
+      uses: actions/upload-artifact@v2
+      with:
+        name: '${{ env.baselineTag }}'
+        path: '${{ github.workspace }}/${{ env.baselineTag }}'
+      
+      # Checkout code
+    - name: Checkout code
+      uses: actions/checkout@v2
+  
+        
+      # Publish Artifact: Deployment-Scripts
+    - name: 'Publish Artifact: Deployment-Scripts'
+      env:
+        NODE_EXTRA_CA_CERTS: /etc/ssl/certs/ca-certificates.crt  
+      uses: actions/upload-artifact@v2
+      with:
+        name: 'deployment-scripts'
+        path: '${{ github.workspace }}/Deployment-Scripts/AzureDatabricks'
+                          
+
+#############################################################
+  # Deploy  to NPR
+#############################################################
+  NPR:
+    needs: Build
+    runs-on: ubuntu-latest
+      # The type of runner that the job will run on
+
+    env:
+      resourceGroupName: 'RG-SEA-DATAX-CARDX-DP-NPR-01'
+      databricksWorkspaceName: 'dxcardxseaadb001dev'
+      baselineTag: ${{ github.event.client_payload.baselinetag }}
+      revision_number: ${{ github.event.client_payload.revision_number }}
+      import_nb: ${{ github.event.client_payload.import_nb }}
+      remove_nb: ${{ github.event.client_payload.remove_nb }}
+      import_dbfs: ${{ github.event.client_payload.import_dbfs }}
+      remove_dbfs: ${{ github.event.client_payload.remove_dbfs }}
+      execute_batch: ${{ github.event.client_payload.execute_batch_list }}
+      execute_streaming: ${{ github.event.client_payload.execute_streaming_list }}
+      wf_name: ${{ github.event.client_payload.wf_name_list }}
+      GITNB: 'ADB/CARDX'
+      NODE_EXTRA_CA_CERTS: '/etc/ssl/certs/ca-certificates.crt'
+      keyVaultName: 'dxcardxseakv001dev'
+      NOTEBOOK_DEPLOYMENT_PATH: '/CARDXSIT'
+      monoline_env: 'cardxdev'
+      DBFS_DIRECTORY: '/FileStore/cardxdev'
+      GIT_DBFS_DIRECTORY: ${{ github.workspace }}/${{ github.event.client_payload.baselinetag }}/Job-Config
+      rg_keyVaultName: 'RG-SEA-CENTRALKEY-CARDX-NPR-01'
+      NOTEBOOK_EXE_PATH: '/CARDXSIT/execute'
+      BATCH_CLUSTER: 'dp-batch-processing'
+      STREAM_CLUSTER: 'dp-stream-processing'
+      MENV: 'cardxsit'
+      
+    steps:
+
+     #checkout shared repo for module
+    - name: Checkout on shared marketplace repo
+      uses: actions/checkout@v2
+      with:
+        repository: 'Share-Module/market-place-module'
+        token: ${{ secrets.PAT_ACCESS_NPR }}
+        
+     # Login to Azure
+    - name: Login via Az module
+      uses: ./azure-login
+      with:
+        creds: |
+          ${{ secrets.CARDX_SP_NPR }}
+          
+    # Download secret from KeyVault Secrets
+    - name: Download secret from KeyVault Secrets
+      uses: ./keyvault-module
+      with:
+        keyvault: ${{ env.keyVaultName }}
+        secrets: 'dxcardxsea-client-id,dxcardxsea-client-secret,dxcardxsea-tenant-id,dxcardxsea-subscription-id'
+      id: databricksSecretAction
+
+############################ Download Notebook Artifact and Deployment Scripts ######################################## 
+    
+        
+    # Download Artifact: Databricks-Notebooks
+    - name: 'Download Artifact: Databricks-Notebooks'
+      if: ${{ env.import_nb != ''}} 
+      env:
+        NODE_EXTRA_CA_CERTS: /etc/ssl/certs/ca-certificates.crt 
+      uses: actions/download-artifact@v2
+      with:
+        name: '${{ env.baselineTag}}'
+        path: '${{ github.workspace }}/${{ env.baselineTag }}'
+        
+
+    # Download Artifact: Deployment Scripts
+    - name: 'Download Artifact: Deployment Scripts'
+      env:
+        NODE_EXTRA_CA_CERTS: /etc/ssl/certs/ca-certificates.crt 
+      uses: actions/download-artifact@v2
+      with:
+        name: 'deployment-scripts'
+        path: ${{ github.workspace }}/Deployment-Scripts/AzureDatabricks
+        
+        
+ ############## Deploy notebook ##########################################
+    - name: Deploy Notebook
+      if: contains(env.wf_name, 'CARDX-NPR-ADB-IMPORT')
+      run:  |
+        echo "Begin partial diff change"
+        if [[ "${{ env.import_nb }}" != "" ]]; then
+          python3 $GITHUB_WORKSPACE/Deployment-Scripts/AzureDatabricks/adb-deploy.py \
+            ${{ steps.databricksSecretAction.outputs.dxcardxsea-tenant-id }} \
+            ${{ steps.databricksSecretAction.outputs.dxcardxsea-client-id }} \
+            ${{ steps.databricksSecretAction.outputs.dxcardxsea-client-secret }} \
+            ${{ steps.databricksSecretAction.outputs.dxcardxsea-subscription-id }} \
+            ${{ env.resourceGroupName }} \
+            ${{ env.databricksWorkspaceName }} \
+            ${{ env.NOTEBOOK_DEPLOYMENT_PATH }} \
+            ${{ github.workspace }}/${{ env.baselineTag }} \
+            ${{ env.import_nb }}
+        else
+          echo "Empty list"
+        fi
+        
+ ############## Remove notebook ##########################################
+    - name: Remove Notebook
+      if: contains(env.wf_name, 'CARDX-NPR-ADB-IMPORT')
+      run:  |
+        echo "Begin remove notebook"
+        if [[ "${{ env.remove_nb }}" != "" ]]; then
+          echo "remove 1 file"
+          python3 $GITHUB_WORKSPACE/Deployment-Scripts/AzureDatabricks/adb-remove.py \
+           ${{ steps.databricksSecretAction.outputs.dxcardxsea-tenant-id }} \
+           ${{ steps.databricksSecretAction.outputs.dxcardxsea-client-id }} \
+           ${{ steps.databricksSecretAction.outputs.dxcardxsea-client-secret }} \
+           ${{ steps.databricksSecretAction.outputs.dxcardxsea-subscription-id }} \
+           ${{ env.resourceGroupName }} \
+           ${{ env.databricksWorkspaceName }} \
+           ${{ env.NOTEBOOK_DEPLOYMENT_PATH }} \
+           ${{ github.workspace }}/${{ env.baselineTag }} \
+           ${{ env.remove_nb }}
+        else
+          echo "Empty list"
+        fi
+        
+  ############## Deploy DBFS ##########################################
+    - name: Deploy Import DBFS file
+      if: contains(env.wf_name, 'CARDX-NPR-ADB-DBFS')
+      run:  |
+        echo "Begin partial diff change"
+        if [[ "${{ env.import_dbfs }}" != "" ]]; then
+          echo ${{ env.import_dbfs }}
+          chmod +x $GITHUB_WORKSPACE/Deployment-Scripts/AzureDatabricks/adb-deploy-dbfs.py
+          python3 $GITHUB_WORKSPACE/Deployment-Scripts/AzureDatabricks/adb-deploy-dbfs.py \
+            ${{ steps.databricksSecretAction.outputs.dxcardxsea-tenant-id }} \
+            ${{ steps.databricksSecretAction.outputs.dxcardxsea-client-id }} \
+            ${{ steps.databricksSecretAction.outputs.dxcardxsea-client-secret}} \
+            ${{ steps.databricksSecretAction.outputs.dxcardxsea-subscription-id }} \
+            ${{ env.resourceGroupName }} \
+            ${{ env.databricksWorkspaceName }} \
+            ${{ env.DBFS_DIRECTORY }} \
+            ${{ env.GIT_DBFS_DIRECTORY}} \
+            ${{ env.import_dbfs }}    
+        else
+          echo "Empty list"
+        fi
+        
+ ############## Remove DBFS ##########################################
+    - name: Remove DBFS file
+      if: contains(env.wf_name, 'CARDX-NPR-ADB-DBFS')
+      run:  |
+        echo "Begin remove notebook"
+        if [[ "${{ env.remove_dbfs }}" != "" ]]; then
+          echo ${{ env.remove_dbfs }}
+          chmod +x $GITHUB_WORKSPACE/Deployment-Scripts/AzureDatabricks/adb-remove-dbfs.py
+          python3 $GITHUB_WORKSPACE/Deployment-Scripts/AzureDatabricks/adb-remove-dbfs.py \
+            ${{ steps.databricksSecretAction.outputs.dxcardxsea-tenant-id }} \
+            ${{ steps.databricksSecretAction.outputs.dxcardxsea-client-id }} \
+            ${{ steps.databricksSecretAction.outputs.dxcardxsea-client-secret}} \
+            ${{ steps.databricksSecretAction.outputs.dxcardxsea-subscription-id }} \
+            ${{ env.resourceGroupName }} \
+            ${{ env.databricksWorkspaceName }} \
+            ${{ env.DBFS_DIRECTORY }} \
+            ${{ env.GIT_DBFS_DIRECTORY}} \
+            ${{ env.remove_dbfs }}
+        else
+          echo "Empty list"
+       
+        fi
+        
+  ############## Execute Batch  ##########################################      
+        
+    - name: Execute Databricks Notebooks Batch Cluster
+      if: contains(env.wf_name, 'CARDX-NPR-ADB-EXECUTE')
+      run: |
+        chmod +x $GITHUB_WORKSPACE/Deployment-Scripts/AzureDatabricks/adb-execute.py
+        if [[ "${{ env.execute_batch }}" = *","* ]]; then
+          echo ${{ env.execute_batch }}
+          IFS=',' read -ra EXEB <<< "${{ env.execute_batch }}"
+          for i in "${EXEB[@]}"; do
+            echo "$i"
+            python3 $GITHUB_WORKSPACE/Deployment-Scripts/AzureDatabricks/adb-execute.py \
+            ${{ steps.databricksSecretAction.outputs.dxcardxsea-tenant-id }} \
+            ${{ steps.databricksSecretAction.outputs.dxcardxsea-client-id }} \
+            ${{ steps.databricksSecretAction.outputs.dxcardxsea-client-secret }} \
+            ${{ steps.databricksSecretAction.outputs.dxcardxsea-subscription-id }} \
+            ${{ env.resourceGroupName }} \
+            ${{ env.databricksWorkspaceName }} \
+            ${{ env.NOTEBOOK_DEPLOYMENT_PATH }} \
+            ${{ env.BATCH_CLUSTER }} \
+            ${{ env.NOTEBOOK_EXE_PATH }}/${{ env.baselineTag }}/$i \
+            ${{ env.baselineTag }} \
+            ${{ env.MENV }}
+          done
+                
+                
+        elif [[ "${{ env.execute_batch }}" != "" ]]; then
+          echo "1 file execute"
+          python3 $GITHUB_WORKSPACE/Deployment-Scripts/AzureDatabricks/adb-execute.py \
+          ${{ steps.databricksSecretAction.outputs.dxcardxsea-tenant-id }} \
+          ${{ steps.databricksSecretAction.outputs.dxcardxsea-client-id }} \
+          ${{ steps.databricksSecretAction.outputs.dxcardxsea-client-secret }} \
+          ${{ steps.databricksSecretAction.outputs.dxcardxsea-subscription-id }} \
+          ${{ env.resourceGroupName }} \
+          ${{ env.databricksWorkspaceName }} \
+          ${{ env.NOTEBOOK_DEPLOYMENT_PATH }} \
+          ${{ env.BATCH_CLUSTER }} \
+          ${{ env.NOTEBOOK_EXE_PATH }}/${{ env.baselineTag }}/${{ env.execute_batch }} \
+          ${{ env.baselineTag }} \
+          ${{ env.MENV }}
+        else 
+          echo "Empty list"
+        fi
+   
+   ############## Execute Streaming  ##########################################      
+   
+    - name: Execute Databricks Notebooks Stream Cluster
+      if: contains(env.wf_name, 'CARDX-NPR-ADB-EXECUTE')
+      run: |
+        chmod +x $GITHUB_WORKSPACE/Deployment-Scripts/AzureDatabricks/adb-execute.py
+        if [[ "${{ env.execute_streaming }}" = *","* ]]; then
+          echo ${{ env.execute_streaming }}
+          IFS=',' read -ra EXES <<< "${{ env.execute_streaming }}"
+          for i in "${EXES[@]}"; do
+            echo "$i"
+            python3 $GITHUB_WORKSPACE/Deployment-Scripts/AzureDatabricks/adb-execute.py \
+            ${{ steps.databricksSecretAction.outputs.dxcardxsea-tenant-id }} \
+            ${{ steps.databricksSecretAction.outputs.dxcardxsea-client-id }} \
+            ${{ steps.databricksSecretAction.outputs.dxcardxsea-client-secret }} \
+            ${{ steps.databricksSecretAction.outputs.dxcardxsea-subscription-id }} \
+            ${{ env.resourceGroupName }} \
+            ${{ env.databricksWorkspaceName }} \
+            ${{ env.NOTEBOOK_DEPLOYMENT_PATH }} \
+            ${{ env.STREAM_CLUSTER }} \
+            ${{ env.NOTEBOOK_EXE_PATH }}/${{ env.baselineTag }}/$i \
+            ${{ env.baselineTag }} \
+            ${{ env.MENV }}
+          done
+                
+                
+        elif [[ "${{ env.execute_streaming }}" != "" ]]; then
+          echo "1 file execute"
+          python3 $GITHUB_WORKSPACE/Deployment-Scripts/AzureDatabricks/adb-execute.py \
+          ${{ steps.databricksSecretAction.outputs.dxcardxsea-tenant-id }} \
+          ${{ steps.databricksSecretAction.outputs.dxcardxsea-client-id }} \
+          ${{ steps.databricksSecretAction.outputs.dxcardxsea-client-secret }} \
+          ${{ steps.databricksSecretAction.outputs.dxcardxsea-subscription-id }} \
+          ${{ env.resourceGroupName }} \
+          ${{ env.databricksWorkspaceName }} \
+          ${{ env.NOTEBOOK_DEPLOYMENT_PATH }} \
+          ${{ env.STREAM_CLUSTER }} \
+          ${{ env.NOTEBOOK_EXE_PATH }}/${{ env.baselineTag }}/${{ env.execute_streaming }} \
+          ${{ env.baselineTag }} \
+          ${{ env.MENV }}
+        else 
+          echo "Empty list"
+        fi
