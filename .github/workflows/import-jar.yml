@@ -29,5 +29,5 @@ jobs:
     - name: Azure Key Vault Action
       uses: Azure/get-keyvault-secrets@v1
       with:
-        keyVaultName: ${{ env.keyvaultname }}
-        secretsFilterString: 'client-id,client-secret,subscriptionId,tenantId'
+        keyvault: ${{ env.keyvaultname }}
+        secrets: 'client-id,client-secret,subscriptionId,tenantId'
