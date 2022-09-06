@@ -31,3 +31,4 @@ jobs:
       with:
         keyvault: ${{ env.keyvaultname }}
         secrets: 'client-id,client-secret,subscriptionId,tenantId'
+      id: keyvaultsecrets
