@@ -14,11 +14,11 @@ jobs:
     runs-on: ubuntu-latest 
     env:
       keyvaultname: 'devopstestadb-kv'
-      import_dbfs: 'AESEncryption_UDF_V3_3_0.jar'
+      import_dbfs: 'dbfs:/FileStore/${menv}/DATAX/jars/AESEncryption_UDF_V3_3_0.jar'
       resourceGroupName: 'devops-test-deploy'
       databricksWorkspaceName: 'devopstestadb'
       DBFS_DIRECTORY: '/FileStore/Jars'
-      GIT_DBFS_DIRECTORY: '${{ github.workspace }}/Job-Config/DATAX/jars'
+      GIT_DBFS_DIRECTORY: '${{ github.workspace }}/Job-Config'
       
         
     steps:
