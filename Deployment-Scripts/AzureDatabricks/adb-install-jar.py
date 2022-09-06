@@ -20,6 +20,7 @@ workspaceName=str(sys.argv[6])
 DBFS_DIRECTORY=str(sys.argv[7])
 GIT_DBFS_DIRECTORY=str(sys.argv[8])
 to_add = str(sys.argv[9])
+clustername = str(sys.argv[10])
 
 to_add_dbfs = to_add.split(',')
 print(to_add_dbfs)
@@ -117,7 +118,7 @@ if not Workspcae_Token:
 ##################################################
 
 
-def install_library(dbfs_path):
+def install_library(dbfs_path, cluster_name):
 
     print(dbfs_path)
 
@@ -148,7 +149,7 @@ if to_add_dbfs:
         print(raw_path_folder_add)
         join_raw_path_add = os.path.join(DBFS_DIRECTORY, raw_path_folder_add)
         
-        response = install_library(join_raw_path_add)
+        response = install_library(join_raw_path_add, clustername)
         
         
         
