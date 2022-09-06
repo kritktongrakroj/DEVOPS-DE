@@ -20,6 +20,7 @@ workspaceName=str(sys.argv[6])
 DBFS_DIRECTORY=str(sys.argv[7])
 GIT_DBFS_DIRECTORY=str(sys.argv[8])
 to_add = str(sys.argv[9])
+CLUSTER_NAME = str(sys.argv[10])
 
 to_add_dbfs = to_add.split(',')
 print(to_add_dbfs)
@@ -116,7 +117,7 @@ if not Workspcae_Token:
 
 ##################################################
 
-def get_adb_cluster_id_api(endpoint):
+def get_adb_cluster_id_api(endpoint,CLUSTER_NAME):
     api_url = "https://{}/api/{}".format(Workspcae_URL,endpoint)
     headers = {'Authorization': 'Bearer {}'.format(DBRKS_BEARER_TOKEN)}
     print(api_url)
@@ -135,11 +136,11 @@ def get_adb_cluster_id_api(endpoint):
         if adb_cluster["cluster_name"] == CLUSTER_NAME:
             return adb_cluster['cluster_id']
     
-def install_library(dbfs_path):
+def install_library(dbfs_path,CLUSTER_NAME):
 
     print(dbfs_path)
     
-    Cluster_ID = get_adb_cluster_id_api("2.0/clusters/list")
+    Cluster_ID = get_adb_cluster_id_api("2.0/clusters/list",CLUSTER_NAME)
     print(Cluster_ID)
 
     json_content = {
@@ -169,7 +170,7 @@ if to_add_dbfs:
         print(raw_path_folder_add)
         join_raw_path_add = os.path.join(DBFS_DIRECTORY, raw_path_folder_add)
         
-        response = install_library(join_raw_path_add)
+        response = install_library(join_raw_path_add,CLUSTER_NAME)
         
         
         
