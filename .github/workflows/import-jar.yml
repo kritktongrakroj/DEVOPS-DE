@@ -19,6 +19,7 @@ jobs:
       databricksWorkspaceName: 'devopstestadb'
       DBFS_DIRECTORY: '/FileStore/Jars'
       GIT_DBFS_DIRECTORY: '${{ github.workspace }}/Job-Config/DATAX'
+      clustername: 'DevOpsTest'
       
         
     steps:
@@ -82,7 +83,8 @@ jobs:
             ${{ env.databricksWorkspaceName }} \
             ${{ env.DBFS_DIRECTORY }} \
             ${{ env.GIT_DBFS_DIRECTORY}} \
-            ${{ env.import_dbfs }}    
+            ${{ env.import_dbfs }} \
+            ${{ env.clustername }}
         else
           echo "Empty list"
         fi
