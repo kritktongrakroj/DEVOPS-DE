@@ -147,7 +147,7 @@ def install_library(dbfs_path,CLUSTER_NAME):
       "cluster_id": Cluster_ID,
       "libraries": [
         {
-          "jar": "dbfs:/" + dbfs_path
+          "jar": "dbfs:" + dbfs_path
         }
       ]
     } 
