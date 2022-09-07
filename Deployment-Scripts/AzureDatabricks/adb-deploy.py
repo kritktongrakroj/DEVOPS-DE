@@ -165,7 +165,7 @@ if os.path.exists(DIRECTORY):
                 notebook_full_path = os.path.join(path.split(DATABRICKS_NOTEBOOKS_DIRECTORY)[-1], file)
                 notebook_name = notebook_full_path.split(TYPE_OF_FILE)[0]
                 #if notebook_name[0] == "":
-                notebook_name = notebook_name[1:]
+#                 notebook_name = notebook_name[1:]
                 # Get Absolute path to import in Databricks Notebook
                 notebook_abs_path = os.path.join(NOTEBOOK_DIRECTORY,notebook_name).replace('\\','/')
                 #print("printing notebook 0",notebook_name[0],notebook_name[1:])
