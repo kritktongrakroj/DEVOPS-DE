@@ -21,8 +21,8 @@ jobs:
       GIT_DBFS_DIRECTORY: '${{ github.workspace }}/Job-Config/DATAX'
       cluster_name: 'DevOpsTest'
       NOTEBOOK_DEPLOYMENT_PATH: '/DATAXDEV'
-      notebookDirectory: '${{ github.workspace }}/ADB/DATAX/batch'
-      import_nb: '${menv}/test.py'
+      notebookDirectory: '${{ github.workspace }}/ADB'
+      import_nb: 'DATAX/batch/test.py'
 
       
         
