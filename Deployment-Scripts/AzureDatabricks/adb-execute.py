@@ -19,6 +19,9 @@ workspaceName=str(sys.argv[6])
 NOTEBOOK_DIRECTORY=str(sys.argv[7])
 CLUSTER_NAME = str(sys.argv[8])
 NOTEBOOK_EXE_PATH = str(sys.argv[9])
+BSLNUMBER = str(sys.argv[10])
+MENV = str(sys.argv[11])
+print(sys.argv)
 
 #Declare REQ BODY for dbrks_bearer_token() and dbrks_management_token()
 TOKEN_REQ_BODY = {
@@ -129,7 +132,7 @@ print(Cluster_ID)
 # notebookpath = NOTEBOOK_EXE_PATH
 
 print('Running job for:' + NOTEBOOK_EXE_PATH)
-values = {'run_name': 'config deploy', 'existing_cluster_id': Cluster_ID, 'timeout_seconds': 4800, 'notebook_task': {'notebook_path': NOTEBOOK_EXE_PATH, 'base_parameters': {'workspaces': NOTEBOOK_EXE_PATH, 'directory': NOTEBOOK_DIRECTORY, 'adbURL': Workspcae_URL}}}
+values = {'run_name': 'config deploy', 'existing_cluster_id': Cluster_ID, 'timeout_seconds': 4800, 'notebook_task': {'notebook_path': NOTEBOOK_EXE_PATH, 'base_parameters': {'workspaces': NOTEBOOK_EXE_PATH, 'directory': NOTEBOOK_DIRECTORY, 'adbURL': Workspcae_URL, 'bsl_number': BSLNUMBER, 'menv': MENV}}}
 resp = requests.post('https://'+Workspcae_URL + '/api/2.0/jobs/runs/submit',
                      data=json.dumps(values), auth=("token", Workspcae_Token))
 runjson = resp.text
@@ -150,7 +153,7 @@ while waiting:
     if current_state in ['TERMINATED']:
         try:
             status = j['notebook_output']['result']
-            if status == 'SUCCESS':
+            if 'SUCCESS' in status:
                 break
             else:
                 raise ValueError(f'Notebook run result in failure status: {status}')
