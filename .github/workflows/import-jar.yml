@@ -20,6 +20,9 @@ jobs:
       DBFS_DIRECTORY: '/FileStore/Jars'
       GIT_DBFS_DIRECTORY: '${{ github.workspace }}/Job-Config/DATAX'
       cluster_name: 'DevOpsTest'
+      NOTEBOOK_DEPLOYMENT_PATH: '/DATAXDEV'
+      notebookDirectory: '${{ github.workspace }}/ADB/DATAX/batch'
+      import_nb: '/${menv}/test.py'
 
       
         
@@ -69,23 +72,41 @@ jobs:
 #           echo "Empty list"
 #         fi
 
-    - name: Deploy install library
+#     - name: Deploy install library
+#       run:  |
+#         echo "Begin partial diff change"
+#         if [[ "${{ env.import_dbfs }}" != "" ]]; then
+#           echo ${{ env.import_dbfs }}
+#           chmod +x $GITHUB_WORKSPACE/Deployment-Scripts/AzureDatabricks/adb-install-jar.py
+#           python3 $GITHUB_WORKSPACE/Deployment-Scripts/AzureDatabricks/adb-install-jar.py \
+#             ${{ steps.keyvaultsecrets.outputs.tenantId }} \
+#             ${{ steps.keyvaultsecrets.outputs.client-id }} \
+#             ${{ steps.keyvaultsecrets.outputs.client-secret}} \
+#             ${{ steps.keyvaultsecrets.outputs.subscriptionId }} \
+#             ${{ env.resourceGroupName }} \
+#             ${{ env.databricksWorkspaceName }} \
+#             ${{ env.DBFS_DIRECTORY }} \
+#             ${{ env.GIT_DBFS_DIRECTORY}} \
+#             ${{ env.import_dbfs }} \
+#             ${{ env.cluster_name }}
+#         else
+#           echo "Empty list"
+#         fi
+        
+    - name: Deploy Notebook
       run:  |
         echo "Begin partial diff change"
-        if [[ "${{ env.import_dbfs }}" != "" ]]; then
-          echo ${{ env.import_dbfs }}
-          chmod +x $GITHUB_WORKSPACE/Deployment-Scripts/AzureDatabricks/adb-install-jar.py
-          python3 $GITHUB_WORKSPACE/Deployment-Scripts/AzureDatabricks/adb-install-jar.py \
+        if [[ "${{ env.import_nb }}" != "" ]]; then
+          python3 $GITHUB_WORKSPACE/Deployment-Scripts/AzureDatabricks/adb-deploy.py \
             ${{ steps.keyvaultsecrets.outputs.tenantId }} \
             ${{ steps.keyvaultsecrets.outputs.client-id }} \
-            ${{ steps.keyvaultsecrets.outputs.client-secret}} \
+            ${{ steps.keyvaultsecrets.outputs.client-secret }} \
             ${{ steps.keyvaultsecrets.outputs.subscriptionId }} \
             ${{ env.resourceGroupName }} \
             ${{ env.databricksWorkspaceName }} \
-            ${{ env.DBFS_DIRECTORY }} \
-            ${{ env.GIT_DBFS_DIRECTORY}} \
-            ${{ env.import_dbfs }} \
-            ${{ env.cluster_name }}
+            ${{ env.NOTEBOOK_DEPLOYMENT_PATH }} \
+            ${{ env.notebookDirectory }} \
+            ${{ env.import_nb }}
         else
           echo "Empty list"
         fi
