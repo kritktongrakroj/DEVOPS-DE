@@ -12,6 +12,12 @@ for jar_file in jar_file_list:
     elif "CustomDateTime_Convertor_UDF_V2_1_0" in jar_file[1]:
         require_jar_dict['CustomDateTime_Convertor_UDF_V2_1_0'] = jar_file[1]
 
+# COMMAND ----------        
+        
+%sql
+drop function IF EXISTS encrypt
+drop function IF EXISTS decrypt   
+        
 # COMMAND ----------
 
 # Encryption functions 
