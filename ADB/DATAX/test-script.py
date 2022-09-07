@@ -1,2 +1,5 @@
 print("Hello, World!")
-print("SUCCESS")
+
+# COMMAND ----------
+
+dbutils.notebook.exit("SUCCESS")
