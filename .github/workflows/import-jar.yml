@@ -97,7 +97,7 @@ jobs:
       run:  |
         echo "Begin partial diff change"
         if [[ "${{ env.import_nb }}" != "" ]]; then
-          python3 $GITHUB_WORKSPACE/Deployment-Scripts/AzureDatabricks/adb-deploy.py
+          python3 $GITHUB_WORKSPACE/Deployment-Scripts/AzureDatabricks/adb-deploy.py \
             ${{ steps.keyvaultsecrets.outputs.tenantId }} \
             ${{ steps.keyvaultsecrets.outputs.client-id }} \
             ${{ steps.keyvaultsecrets.outputs.client-secret }} \
@@ -114,7 +114,7 @@ jobs:
         
     - name: Execute Databricks Notebooks
       run: |
-        python3 $GITHUB_WORKSPACE/Deployment-Scripts/AzureDatabricks/adb-execute.py
+        python3 $GITHUB_WORKSPACE/Deployment-Scripts/AzureDatabricks/adb-execute.py \
           ${{ steps.keyvaultsecrets.outputs.tenantId }} \
           ${{ steps.keyvaultsecrets.outputs.client-id }} \
           ${{ steps.keyvaultsecrets.outputs.client-secret }} \
