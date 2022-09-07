@@ -19,8 +19,8 @@ workspaceName=str(sys.argv[6])
 NOTEBOOK_DIRECTORY=str(sys.argv[7])
 CLUSTER_NAME = str(sys.argv[8])
 NOTEBOOK_EXE_PATH = str(sys.argv[9])
-BSLNUMBER = str(sys.argv[10])
-MENV = str(sys.argv[11])
+BSLNUMBER = "000"
+MENV = "dataxdev"
 print(sys.argv)
 
 #Declare REQ BODY for dbrks_bearer_token() and dbrks_management_token()
