@@ -1,5 +1,5 @@
 # Databricks notebook source
-jar_file_list = dbutils.fs.ls("FileStore/jars/")
+jar_file_list = dbutils.fs.ls("FileStore/Jars/jars/")
 require_jar_dict = {}
 
 for jar_file in jar_file_list:
