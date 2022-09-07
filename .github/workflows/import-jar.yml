@@ -23,7 +23,7 @@ jobs:
       NOTEBOOK_DEPLOYMENT_PATH: '/DATAXDEV'
       notebookDirectory: '${{ github.workspace }}'
       import_nb: '/ADB/DATAX/test-script.py'
-      execute_nb: 'test-script.py'
+      execute_nb: 'test-script'
       
         
     steps:
