@@ -23,7 +23,7 @@ jobs:
       NOTEBOOK_DEPLOYMENT_PATH: '/DATAXDEV'
       notebookDirectory: '${{ github.workspace }}'
       import_nb: '/ADB/DATAX/test-script.py'
-
+      execute_nb: 'test-script.py'
       
         
     steps:
@@ -123,7 +123,7 @@ jobs:
           ${{ env.databricksWorkspaceName }} \
           ${{ env.NOTEBOOK_DEPLOYMENT_PATH }} \
           ${{ env.cluster_name }} \
-          ${{ env.NOTEBOOK_DEPLOYMENT_PATH }}/${{ env.import_nb }}
+          ${{ env.NOTEBOOK_DEPLOYMENT_PATH }}/${{ env.execute_nb }}
           
     - name: Remove Notebook
       run:  |
