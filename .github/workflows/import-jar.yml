@@ -72,26 +72,26 @@ jobs:
 #           echo "Empty list"
 #         fi
 
-    - name: Deploy install library
-      run:  |
-        echo "Begin partial diff change"
-        if [[ "${{ env.import_dbfs }}" != "" ]]; then
-          echo ${{ env.import_dbfs }}
-          chmod +x $GITHUB_WORKSPACE/Deployment-Scripts/AzureDatabricks/adb-install-jar.py
-          python3 $GITHUB_WORKSPACE/Deployment-Scripts/AzureDatabricks/adb-install-jar.py \
-            ${{ steps.keyvaultsecrets.outputs.tenantId }} \
-            ${{ steps.keyvaultsecrets.outputs.client-id }} \
-            ${{ steps.keyvaultsecrets.outputs.client-secret}} \
-            ${{ steps.keyvaultsecrets.outputs.subscriptionId }} \
-            ${{ env.resourceGroupName }} \
-            ${{ env.databricksWorkspaceName }} \
-            ${{ env.DBFS_DIRECTORY }} \
-            ${{ env.GIT_DBFS_DIRECTORY}} \
-            ${{ env.import_dbfs }} \
-            ${{ env.cluster_name }}
-        else
-          echo "Empty list"
-        fi
+#     - name: Deploy install library
+#       run:  |
+#         echo "Begin partial diff change"
+#         if [[ "${{ env.import_dbfs }}" != "" ]]; then
+#           echo ${{ env.import_dbfs }}
+#           chmod +x $GITHUB_WORKSPACE/Deployment-Scripts/AzureDatabricks/adb-install-jar.py
+#           python3 $GITHUB_WORKSPACE/Deployment-Scripts/AzureDatabricks/adb-install-jar.py \
+#             ${{ steps.keyvaultsecrets.outputs.tenantId }} \
+#             ${{ steps.keyvaultsecrets.outputs.client-id }} \
+#             ${{ steps.keyvaultsecrets.outputs.client-secret}} \
+#             ${{ steps.keyvaultsecrets.outputs.subscriptionId }} \
+#             ${{ env.resourceGroupName }} \
+#             ${{ env.databricksWorkspaceName }} \
+#             ${{ env.DBFS_DIRECTORY }} \
+#             ${{ env.GIT_DBFS_DIRECTORY}} \
+#             ${{ env.import_dbfs }} \
+#             ${{ env.cluster_name }}
+#         else
+#           echo "Empty list"
+#         fi
         
     - name: Deploy Notebook
       run:  |
