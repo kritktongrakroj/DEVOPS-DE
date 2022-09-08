@@ -1,5 +1,5 @@
 # Databricks notebook source
-sql_function = dbutil.widgets.get("sql_function")
+sql_function = dbutils.widgets.get("sql_function")
 jar_file_list = dbutils.fs.ls("FileStore/Jars/jars/")
 require_jar_dict = {}
 
