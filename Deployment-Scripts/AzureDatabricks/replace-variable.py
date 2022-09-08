@@ -38,9 +38,9 @@ def update_configValue(rootfilepath,key,value):
 def update_Parameter(rootpath,key,value):
 
     for subdir, dirs, files in os.walk(rootpath):
-	print("subdir is:" subdir)
-	print("dirs is:" dirs)
-	print("files is:" files)
+	print("subdir is: " + subdir)
+	print("dirs is: " + dirs)
+	print("files is: " + files)
         for file in files:
             print(os.path.join(subdir, file))
             update_configValue(os.path.join(subdir, file),key,value)
