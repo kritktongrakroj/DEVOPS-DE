@@ -7,11 +7,10 @@ key_func = str(sys.argv[2])
 key_class = str(sys.argv[3])
 key = []
 value = []
-key[0] = "${function}"
+key[0] = "${" + "function}"
 value[0] = key_func
-key[1] = "${class}"
+key[1] = "${" + "class}"
 value[1] = key_class
-
 
 def update_configValue(rootfilepath):
 
