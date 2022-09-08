@@ -32,11 +32,6 @@ def update_Parameter(rootpath,key,value):
             print(os.path.join(subdir, file))
             update_configValue(os.path.join(subdir, file),key,value)
 
-with open(prop_path, 'rb') as config_file:
-    configs.load(config_file)
- 
-items_view = configs.items()
-list_keys = []
  
 for i in range(len(key)):
     print("the Key is",key[i])
