@@ -14,10 +14,10 @@ def update_configValue(rootfilepath, key, value):
        	for line in file:
             print(line.replace(key, value.lower()), end='')
 	
-	newpathName=rootfilepath.replace(key,value)
-   	print("New Path Name",newpathName)
-    	if newpathName != rootfilepath:
-        	os.rename(rootfilepath,newpathName)  
+    newpathName=rootfilepath.replace(key,value)
+    print("New Path Name",newpathName)
+    if newpathName != rootfilepath:
+        os.rename(rootfilepath,newpathName)  
 
 for i in range(len(key)):
 	for subdir, file in os.walk(import_nb):
