@@ -26,6 +26,7 @@ jobs:
       execute_nb: 'test-script'
       function: 'encrypt'
       class: 'AESEncryptedUDF'
+      import_nb_dir: '${{ github.workspace }}/ADB/DATAX'
       
         
     steps:
