@@ -2,13 +2,15 @@ import os
 import fileinput
 import sys
 
+import_nb = str(sys.argv[1])
+key_func = str(sys.argv[2])
+key_class = str(sys.argv[3])
 key = []
 value = []
-import_nb = str(sys.argv[1])
-value[0] = str(sys.argv[2])
-value[0] = str(sys.argv[3])
 key[0] = "${function}"
+value[0] = key_func
 key[1] = "${class}"
+value[1] = key_class
 
 
 def update_configValue(rootfilepath):
