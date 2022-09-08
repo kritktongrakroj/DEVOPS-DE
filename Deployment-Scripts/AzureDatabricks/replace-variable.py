@@ -1,4 +1,3 @@
-from jproperties import Properties
 import os
 import fileinput
 import sys
@@ -19,5 +18,5 @@ def update_configValue(rootfilepath):
             print(line.replace(key[i], value[i].lower()), end='')
 
 for i in range(len(key)):
-	for subdir, files in os.walk(import_nb):
-		update_configValue()
+	for subdir, file in os.walk(import_nb):
+		update_configValue(os.path.join(subdir, file))
