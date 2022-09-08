@@ -15,12 +15,8 @@ for jar_file in jar_file_list:
 # COMMAND ----------
 
 # Encryption functions 
-spark.sql(f""" CREATE OR REPLACE FUNCTION encrypt AS 'AESEncryptedUDF'
+spark.sql(f""" CREATE OR REPLACE FUNCTION ${function} AS '${class}'
                 USING JAR '/Jars/jars/{require_jar_dict["AESEncryption_UDF_V3_3_0"]}' """) 
-
-spark.sql(f""" CREATE OR REPLACE FUNCTION decrypt AS 'AESDecryptedUDF'
-                USING JAR '/Jars/jars/{require_jar_dict["AESEncryption_UDF_V3_3_0"]}' """)
-
 
 # COMMAND ----------
 dbutils.notebook.exit("SUCCESS")
