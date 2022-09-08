@@ -26,7 +26,6 @@ jobs:
       execute_nb: 'test-script'
       function: 'encrypt'
       class: 'AESEncryptedUDF'
-      import_nb_dir: '${{ github.workspace }}/ADB/DATAX'
       
         
     steps:
@@ -96,18 +95,6 @@ jobs:
 #           echo "Empty list"
 #         fi
         
-    - name: Replace Variable in Notebook
-      run:  |
-        echo "Begin partial diff change"
-        if [[ "${{ env.import_nb }}" != "" ]]; then
-          python3 $GITHUB_WORKSPACE/Deployment-Scripts/AzureDatabricks/replace-variable.py \
-            ${{ env.import_nb_dir }} \
-            ${{ env.function }} \
-            ${{ env.class }} 
-        else
-          echo "Empty list"
-        fi
-        
     - name: Deploy Notebook
       run:  |
         echo "Begin partial diff change"
@@ -127,18 +114,20 @@ jobs:
         fi
         
         
-#     - name: Execute Databricks Notebooks
-#       run: |
-#         python3 $GITHUB_WORKSPACE/Deployment-Scripts/AzureDatabricks/adb-execute.py \
-#           ${{ steps.keyvaultsecrets.outputs.tenantId }} \
-#           ${{ steps.keyvaultsecrets.outputs.client-id }} \
-#           ${{ steps.keyvaultsecrets.outputs.client-secret }} \
-#           ${{ steps.keyvaultsecrets.outputs.subscriptionId }} \
-#           ${{ env.resourceGroupName }} \
-#           ${{ env.databricksWorkspaceName }} \
-#           ${{ env.NOTEBOOK_DEPLOYMENT_PATH }} \
-#           ${{ env.cluster_name }} \
-#           ${{ env.NOTEBOOK_DEPLOYMENT_PATH }}/${{ env.execute_nb }}
+    - name: Execute Databricks Notebooks
+      run: |
+        python3 $GITHUB_WORKSPACE/Deployment-Scripts/AzureDatabricks/adb-execute.py \
+          ${{ steps.keyvaultsecrets.outputs.tenantId }} \
+          ${{ steps.keyvaultsecrets.outputs.client-id }} \
+          ${{ steps.keyvaultsecrets.outputs.client-secret }} \
+          ${{ steps.keyvaultsecrets.outputs.subscriptionId }} \
+          ${{ env.resourceGroupName }} \
+          ${{ env.databricksWorkspaceName }} \
+          ${{ env.NOTEBOOK_DEPLOYMENT_PATH }} \
+          ${{ env.cluster_name }} \
+          ${{ env.NOTEBOOK_DEPLOYMENT_PATH }}/${{ env.execute_nb }} \
+          ${{ env.function }} \
+          ${{ env.class }} 
           
 #     - name: Remove Notebook
 #       run:  |
