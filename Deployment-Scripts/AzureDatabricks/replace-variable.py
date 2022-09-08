@@ -1,3 +1,4 @@
+from jproperties import Properties
 import os
 import fileinput
 import sys
