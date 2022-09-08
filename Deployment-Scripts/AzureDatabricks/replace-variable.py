@@ -8,11 +8,11 @@ key_class = str(sys.argv[3])
 key = ["${function}","${class}"]
 value = [key_func,key_class]
 
-def update_configValue(rootfilepath):
+def update_configValue(rootfilepath, key, value):
 
     with fileinput.FileInput(rootfilepath, inplace=True) as file:
        	for line in file:
-            print(line.replace(key[i], value[i].lower()), end='')
+            print(line.replace(key, value.lower()), end='')
 	
 	newpathName=rootfilepath.replace(key,value)
    	print("New Path Name",newpathName)
@@ -21,4 +21,4 @@ def update_configValue(rootfilepath):
 
 for i in range(len(key)):
 	for subdir, file in os.walk(import_nb):
-		update_configValue(os.path.join(subdir, file))
+		update_configValue(os.path.join(subdir, file), key[i], value[i])
