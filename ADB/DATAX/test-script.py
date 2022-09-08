@@ -1,5 +1,6 @@
 # Databricks notebook source
 sql_function = dbutils.widgets.get("sql_function")
+lib_class = dbutils.widgets.get("lib_class")
 jar_file_list = dbutils.fs.ls("FileStore/Jars/jars/")
 require_jar_dict = {}
 
@@ -16,7 +17,7 @@ for jar_file in jar_file_list:
 # COMMAND ----------
 
 # Encryption functions 
-spark.sql(f""" CREATE OR REPLACE FUNCTION sql_function AS 'lib_class'
+spark.sql(f""" CREATE OR REPLACE FUNCTION ${sql_function} AS '${lib_class}'
                 USING JAR '/Jars/jars/{require_jar_dict["AESEncryption_UDF_V3_3_0"]}' """) 
 
 # COMMAND ----------
