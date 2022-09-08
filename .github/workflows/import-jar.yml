@@ -101,7 +101,7 @@ jobs:
         echo "Begin partial diff change"
         if [[ "${{ env.import_nb }}" != "" ]]; then
           python3 $GITHUB_WORKSPACE/Deployment-Scripts/AzureDatabricks/replace-variable.py \
-            ${{ env.import_nb }} \
+            ${{ env.import_nb_dir }} \
             ${{ env.function }} \
             ${{ env.class }} 
         else
