@@ -19,7 +19,7 @@ workspaceName=str(sys.argv[6])
 NOTEBOOK_DIRECTORY=str(sys.argv[7])
 CLUSTER_NAME = str(sys.argv[8])
 NOTEBOOK_EXE_PATH = str(sys.argv[9])
-func = str(sys.argv[10])
+sql_function = str(sys.argv[10])
 lib_class = str(sys.argv[11])
 
 print(sys.argv)
